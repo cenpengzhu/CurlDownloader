@@ -1,0 +1,123 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="LibcurlTool">
+      <UniqueIdentifier>{6b81f95c-02b6-46f3-8f96-fcbd37ff0651}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="DownloadTask">
+      <UniqueIdentifier>{d74d63db-3906-413e-8c73-deca7746b5d5}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="DownloadThread">
+      <UniqueIdentifier>{392e5b2b-3e3d-4516-9377-1a921d4831af}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="BaseThread">
+      <UniqueIdentifier>{1a15c246-aa69-441b-b737-521393d5cd2c}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="BaseTask">
+      <UniqueIdentifier>{6b022049-37ff-43a4-8f45-f0c1c4898873}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="DownloadTaskManager">
+      <UniqueIdentifier>{3f11e0bb-8bcf-4461-9cbf-d7b52dc6a30b}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="DownloadThreadManager">
+      <UniqueIdentifier>{c17a0a31-3644-4cc8-969d-3e0da35a5604}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="BaseTaskManager">
+      <UniqueIdentifier>{d6679634-1f07-4e00-8b80-2c6db1eacbff}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="BaseThreadManager">
+      <UniqueIdentifier>{28d50f47-de39-40b5-adbd-bbf6622fc812}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="EasyLoggingpp">
+      <UniqueIdentifier>{9f12142f-d2d8-41c9-982f-ddd79e8b31d2}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Downloader">
+      <UniqueIdentifier>{fe3446ab-4752-4e3e-819e-bc16112b321f}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="DownloadInfo">
+      <UniqueIdentifier>{a5591df0-8361-4b2a-9da8-c00b589cbbec}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="MD5">
+      <UniqueIdentifier>{ca1f4338-96e0-4620-aa5f-f5e16acec640}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="CommonHeader">
+      <UniqueIdentifier>{b095df48-994d-445e-8937-b7024a24267b}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Export">
+      <UniqueIdentifier>{a22e766a-09f2-420f-a249-4b4ef6f342fa}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="src\CDownloadThread.cpp">
+      <Filter>DownloadThread</Filter>
+    </ClCompile>
+    <ClCompile Include="src\CDownloadTaskManager.cpp">
+      <Filter>DownloadTaskManager</Filter>
+    </ClCompile>
+    <ClCompile Include="src\CLibcurlTool.cpp">
+      <Filter>LibcurlTool</Filter>
+    </ClCompile>
+    <ClCompile Include="src\CDownloader.cpp">
+      <Filter>Downloader</Filter>
+    </ClCompile>
+    <ClCompile Include="src\md5.cpp">
+      <Filter>MD5</Filter>
+    </ClCompile>
+    <ClCompile Include="src\stdafx.cpp">
+      <Filter>CommonHeader</Filter>
+    </ClCompile>
+    <ClCompile Include="src\CurlDownloader.cpp">
+      <Filter>Export</Filter>
+    </ClCompile>
+    <ClCompile Include="src\easylogging++.cc">
+      <Filter>EasyLoggingpp</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="src\CDownloadThread.h">
+      <Filter>DownloadThread</Filter>
+    </ClInclude>
+    <ClInclude Include="src\CDownloadTask.h">
+      <Filter>DownloadTask</Filter>
+    </ClInclude>
+    <ClInclude Include="src\CThread.h">
+      <Filter>BaseThread</Filter>
+    </ClInclude>
+    <ClInclude Include="src\CTask.h">
+      <Filter>BaseTask</Filter>
+    </ClInclude>
+    <ClInclude Include="src\CDownloadTaskManager.h">
+      <Filter>DownloadTaskManager</Filter>
+    </ClInclude>
+    <ClInclude Include="src\CDownloadThreadManager.h">
+      <Filter>DownloadThreadManager</Filter>
+    </ClInclude>
+    <ClInclude Include="src\CTaskManager.h">
+      <Filter>BaseTaskManager</Filter>
+    </ClInclude>
+    <ClInclude Include="src\CThreadManager.h">
+      <Filter>BaseThreadManager</Filter>
+    </ClInclude>
+    <ClInclude Include="src\CLibcurlTool.h">
+      <Filter>LibcurlTool</Filter>
+    </ClInclude>
+    <ClInclude Include="src\easylogging++.h">
+      <Filter>EasyLoggingpp</Filter>
+    </ClInclude>
+    <ClInclude Include="src\CDownloader.h">
+      <Filter>Downloader</Filter>
+    </ClInclude>
+    <ClInclude Include="src\CDownloadInfo.h">
+      <Filter>DownloadInfo</Filter>
+    </ClInclude>
+    <ClInclude Include="src\md5.h">
+      <Filter>MD5</Filter>
+    </ClInclude>
+    <ClInclude Include="src\stdafx.h">
+      <Filter>CommonHeader</Filter>
+    </ClInclude>
+    <ClInclude Include="src\CurlDownloader.h">
+      <Filter>Export</Filter>
+    </ClInclude>
+  </ItemGroup>
+</Project>

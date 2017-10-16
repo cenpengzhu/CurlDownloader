@@ -1,3 +1,10 @@
+# Visual Studio Files
+\CurlDownloader\.vs\*
+\CurlDownloader\Debug\*
+\CurlDownloader\Release\*
+\CurlDownloader\CurlDownloader\Debug\*
+\CurlDownloader\CurlDownloader\Release\*
+
 # Windows image file caches
 Thumbs.db
 ehthumbs.db
@@ -41,3 +48,16 @@ $RECYCLE.BIN/
 Network Trash Folder
 Temporary Items
 .apdisk
+*.suo
+CurlDownloader/.vs/CurlDownloader/v15/Browse.VC.db
+*.ipch
+*.obj
+CurlDownloader/CurlDownloader/Release/CurlDownloader.Build.CppClean.log
+*.log
+*.tlog
+*.dll
+CurlDownloader/Release/CurlDownloader.exp
+*.iobj
+CurlDownloader/Release/CurlDownloader.ipdb
+CurlDownloader/Release/CurlDownloader.pdb
+CurlDownloader/Release/CurlDownloader.lib
