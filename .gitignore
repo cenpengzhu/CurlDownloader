@@ -1,9 +1,9 @@
 # Visual Studio Files
-\CurlDownloader\.vs\*
-\CurlDownloader\Debug\*
-\CurlDownloader\Release\*
-\CurlDownloader\CurlDownloader\Debug\*
-\CurlDownloader\CurlDownloader\Release\*
+CurlDownloader\.vs\*
+CurlDownloader\Debug\*
+CurlDownloader\Release\*
+CurlDownloader\CurlDownloader\Debug\*
+CurlDownloader\CurlDownloader\Release\*
 
 # Windows image file caches
 Thumbs.db
