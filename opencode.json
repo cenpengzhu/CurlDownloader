@@ -59,8 +59,13 @@
       "Get-ChildItem*": "allow",
       "Get-Location": "allow",
 
+      // 清理临时构建目录与临时文件
+      "Remove-Item*": "allow",
+
+      // 推送到 origin（是否推送仍由用户在对话中明确要求）
+      "git push*": "allow",
+
       // 危险操作：保持逐次确认
-      "git push*": "ask",
       "git commit --amend*": "ask",
       "git reset --hard*": "ask",
       "git clean -*f*": "ask",
