@@ -5,28 +5,28 @@
 
 class CDownloadThread;
 
-//libcurltool·â×°ÁËlibcurlÀïµÄÒ»Ğ©³£ÓÃ·½·¨¡£
+//libcurltoolå°è£…äº†libcurlé‡Œçš„ä¸€äº›å¸¸ç”¨æ–¹æ³•ã€‚
 class CLibcurlTool {
 public:
-	//Ò»¸ölibcurltool³ÖÓĞÒ»¸öcurl interfaceÖ¸Õë
+	//ä¸€ä¸ªlibcurltoolæŒæœ‰ä¸€ä¸ªcurl interfaceæŒ‡é’ˆ
 	CURL * m_pCurl;
 	CLibcurlTool(){
-		//³õÊ¼»¯curl interfaceÖ¸Õë
+		//åˆå§‹åŒ–curl interfaceæŒ‡é’ˆ
 		m_pCurl = curl_easy_init();
 	}
 	~CLibcurlTool(){
-		//Ê¹ÓÃÍê±ØĞëÊÍ·Å
+		//ä½¿ç”¨å®Œå¿…é¡»é‡Šæ”¾
 		curl_easy_cleanup(m_pCurl);
 	}
-	//curl´íÎóÂë×ª»»
+	//curlé”™è¯¯ç è½¬æ¢
 	int figureError(CURLcode err);	
-	//http»ñÈ¡ÄÚÈİ
+	//httpè·å–å†…å®¹
 	CURLcode httpGetContent(const char * strUrl , long long llStartPos , long long llEndPos , char * pResponseData);    
-	//http»ñÈ¡header£¨Ò»°ã»ñÈ¡Ç°500×Ö½ÚµÄÊı¾İ£©
+	//httpè·å–headerï¼ˆä¸€èˆ¬è·å–å‰500å­—èŠ‚çš„æ•°æ®ï¼‰
 	CURLcode httpGetHeader(const char * strUrl , char * pResponseData);	
-	//httpÏÂÔØÎÄ¼ş
+	//httpä¸‹è½½æ–‡ä»¶
 	/*CURLcode httpDownloadContent(const char * strUrl , long long llStartPos , long long llEndPos , CDivide * pDivide);*/
-	//httpÏÂÔØÎÄ¼ş
+	//httpä¸‹è½½æ–‡ä»¶
 	CURLcode httpDownloadContent(const char * strUrl , long long llStartPos , long long llEndPos , CDownloadThread * pThread);	
 	//httpget
 	CURLcode httpGet(const char * strUrl , long long llStartPos , long long llEndPos , int nHeaderFlag , char * pResponseData);

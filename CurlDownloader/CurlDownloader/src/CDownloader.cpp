@@ -15,15 +15,15 @@ CDownloader::CDownloader(const char * strRemotePath,const char * strLocalPath,co
 	m_hDownloaderThreadHandle = (HANDLE)_beginthreadex(NULL,0,&CDownloader::downloaderThread,(LPVOID)this,0,NULL);
 }
 
-//ÏÂÔØ³õÊ¼»¯
+//ä¸‹è½½åˆå§‹åŒ–
 errorcode CDownloader::downloadInit(){
-	//´´½¨Ïß³Ì
+	//åˆ›å»ºçº¿ç¨‹
 	if (m_objThreadManager.createThreads(m_nThreadCounts) == 0)
 	{
 		return localfilerror;
 	}
 
-	//¼ÓÔØÈÎÎñĞÅÏ¢
+	//åŠ è½½ä»»åŠ¡ä¿¡æ¯
 	errorcode err;
 	err = m_objTaskManager.loadDownloadTask();
 
@@ -38,25 +38,25 @@ errorcode CDownloader::downloadInit(){
 	return noerror;
 }
 
-//ÏÂÔØ¿ªÊ¼
+//ä¸‹è½½å¼€å§‹
 errorcode CDownloader::downloadBegin () {
 	m_nDownloadStatus = DOWNLOAD_RUN;
 	return noerror;
 }
 
-//ÏÂÔØÍ£Ö¹
+//ä¸‹è½½åœæ­¢
 errorcode CDownloader::downloadStop(){
 	m_nDownloadStatus = DOWNLOAD_STOP;
 	return noerror;
 }
 
-//ÏÂÔØÔİÍ£
+//ä¸‹è½½æš‚åœ
 errorcode CDownloader::downloadPause(){
 	m_nDownloadStatus = DOWNLOAD_PAUSE;
 	return noerror;
 }
 
-//»ñÈ¡ÏÂÔØĞÅÏ¢
+//è·å–ä¸‹è½½ä¿¡æ¯
 int CDownloader::getDownloadInfo(){
 
 	CDownloadInfo objDownloadInfo;
@@ -73,53 +73,53 @@ int CDownloader::getDownloadInfo(){
 		return 1;
 	}
 
-	//»ñÈ¡²¢Ë¢ĞÂ×ÜÏÂÔØÊ±¼ä
+	//è·å–å¹¶åˆ·æ–°æ€»ä¸‹è½½æ—¶é—´
 	objDownloadInfo.m_llTotalDownloadTime = m_objTaskManager.freshDownloadTime(objDownloadInfo.m_dwTime - m_objDownloadInfo.m_dwTime);
 	
-	//¼ÆËã¼´Ê±ÏÂÔØËÙ¶È
+	//è®¡ç®—å³æ—¶ä¸‹è½½é€Ÿåº¦
 	llLengthPerSecond = (objDownloadInfo.m_llTotalDownloadedLength - m_objDownloadInfo.m_llTotalDownloadedLength)*1000/(objDownloadInfo.m_dwTime - m_objDownloadInfo.m_dwTime);
-	//×ª»»³É¿É¶Á×Ö·û´®
+	//è½¬æ¢æˆå¯è¯»å­—ç¬¦ä¸²
 	strDownloadSpeed = m_objTaskManager.convertToAboutContentLength(llLengthPerSecond);
 	strDownloadSpeed.append("/S");
 	objDownloadInfo.m_strSpeed = strDownloadSpeed;
 
-	//¼ÆËã¼´Ê±ÏÂÔØ½ø¶È
+	//è®¡ç®—å³æ—¶ä¸‹è½½è¿›åº¦
 	dPercent = objDownloadInfo.m_llTotalDownloadedLength*1.0/m_objTaskManager.m_llContentLength;
 	dPercent = ((int)(dPercent*10000))/100.0;
 	objDownloadInfo.m_dPercent = dPercent;
 
-	//¼ÆËãÆ½¾ùÏÂÔØËÙ¶È
+	//è®¡ç®—å¹³å‡ä¸‹è½½é€Ÿåº¦
 	string strAverageSpeed;
 	strAverageSpeed = m_objTaskManager.convertToAboutContentLength(objDownloadInfo.getAverageSpeed());
 	strAverageSpeed.append("/S");
 	objDownloadInfo.m_strAverageSpeed = strAverageSpeed;
 
-	//±£´æ½ø³ÉÔ±±äÁ¿
+	//ä¿å­˜è¿›æˆå‘˜å˜é‡
 	m_objDownloadInfo = objDownloadInfo;
 	//LOG(INFO) << " Percent: " << dPercent << "%, Speed: " << strDownloadSpeed.c_str() << ",AverageSpeed: " << strAverageSpeed;
 	return 1;
 }
 
-//ÏÂÔØÕß×ÓÏß³Ì
+//ä¸‹è½½è€…å­çº¿ç¨‹
 unsigned _stdcall  CDownloader::downloaderThread (void * pParam){
 	CDownloader * p = (CDownloader * )pParam;
 	double eachTPercent = 0.0;
 	while(true){
-		//½áÊøÏÂÔØ
+		//ç»“æŸä¸‹è½½
 		if (p->m_nDownloadStatus == DOWNLOAD_STOP)
 		{
-			//ÈÔÓĞÏÂÔØÏß³ÌÔÚ´¦Àí
+			//ä»æœ‰ä¸‹è½½çº¿ç¨‹åœ¨å¤„ç†
 			if (p->m_objThreadManager.haveThreadsRun())
 			{
 				LOG(INFO) << " Stopping Download," << "Collect Threads";
-				//»ØÊÕÏß³Ì
+				//å›æ”¶çº¿ç¨‹
 				p->m_objThreadManager.collectThreads();
-				//»ØÊÕÈÎÎñ
+				//å›æ”¶ä»»åŠ¡
 				p->m_objTaskManager.collectTasks();
-				//¸üĞÂÏÂÔØĞÅÏ¢
+				//æ›´æ–°ä¸‹è½½ä¿¡æ¯
 				p->getDownloadInfo();
 			}
-			//ËùÓĞÏß³Ì¶¼¿ÕÏĞ£¬Ğ£ÑéÈÎÎñ×´Ì¬£¬ÈôÈÎÎñÎ´Íê³É£¬Éú³ÉÈÎÎñĞÅÏ¢ÎÄ¼ş¡£½áÊøÏß³Ì£¬½áÊøÏÂÔØ¡£
+			//æ‰€æœ‰çº¿ç¨‹éƒ½ç©ºé—²ï¼Œæ ¡éªŒä»»åŠ¡çŠ¶æ€ï¼Œè‹¥ä»»åŠ¡æœªå®Œæˆï¼Œç”Ÿæˆä»»åŠ¡ä¿¡æ¯æ–‡ä»¶ã€‚ç»“æŸçº¿ç¨‹ï¼Œç»“æŸä¸‹è½½ã€‚
 			else{
 				if (!p->m_objTaskManager.isTasksFinished())
 				{
@@ -127,21 +127,21 @@ unsigned _stdcall  CDownloader::downloaderThread (void * pParam){
 					p->m_objTaskManager.writeToFile();
 				}
 				p->m_objThreadManager.stopThreads();
-				//¸üĞÂÏÂÔØĞÅÏ¢
+				//æ›´æ–°ä¸‹è½½ä¿¡æ¯
 				p->getDownloadInfo();
 				LOG(INFO) <<" Stopping Download,"<<"Update DownloadInfo";
 				p->m_objTaskManager.writeToFile();
-				LOG(INFO) << " Download Stopped£¡";
+				LOG(INFO) << " Download Stoppedï¼";
 				break;
 			}
 		}
-		//ÔİÍ£ÏÂÔØ
+		//æš‚åœä¸‹è½½
 		else if (p->m_nDownloadStatus == DOWNLOAD_PAUSE)
 		{
-			//ĞİÃß1Ãë
+			//ä¼‘çœ 1ç§’
 			Sleep(1);
 		}
-		//ÏÂÔØ
+		//ä¸‹è½½
 		else if (p->m_nDownloadStatus == DOWNLOAD_RUN)
 		{
 			if (p->m_objDownloadInfo.m_dPercent/10 > eachTPercent)
@@ -149,26 +149,26 @@ unsigned _stdcall  CDownloader::downloaderThread (void * pParam){
 				eachTPercent = eachTPercent + 1;
 				p->m_objTaskManager.writeToFile();
 			}
-			//Èç¹ûÈÔÓĞÏÂÔØÈÎÎñĞèÒª´¦Àí£¬»òÈÔÓĞÏß³ÌÔÚ´¦ÀíÏÂÔØÈÎÎñ£¬±íÊ¾ÏÂÔØÈÔÃ»ÓĞÍê³É¡£
+			//å¦‚æœä»æœ‰ä¸‹è½½ä»»åŠ¡éœ€è¦å¤„ç†ï¼Œæˆ–ä»æœ‰çº¿ç¨‹åœ¨å¤„ç†ä¸‹è½½ä»»åŠ¡ï¼Œè¡¨ç¤ºä¸‹è½½ä»æ²¡æœ‰å®Œæˆã€‚
 			if (p->m_objTaskManager.haveTasksNotComplete() || p->m_objThreadManager.haveThreadsRun())
 			{
 				//LOG(INFO) << " download run !" ;
-				//ÊÇ·ñ´ÓÔ¶³ÌÏÂÔØÖÃÎªtrue
+				//æ˜¯å¦ä»è¿œç¨‹ä¸‹è½½ç½®ä¸ºtrue
 				p->m_bIsDownloadedFromRemote = true;
-				//»ØÊÕÏß³Ì
+				//å›æ”¶çº¿ç¨‹
 				p->m_objThreadManager.collectThreads();
-				//»ØÊÕÈÎÎñ
+				//å›æ”¶ä»»åŠ¡
 				p->m_objTaskManager.collectTasks();
-				//»ñÈ¡ÏÂÔØĞÅÏ¢
+				//è·å–ä¸‹è½½ä¿¡æ¯
 				p->getDownloadInfo();
-				//ÓĞÈÎÎñĞèÒª´¦ÀíÇÒÓĞÏß³Ì¿ÕÏĞÊ±£¬Ôò½«¿ÕÏĞÏß³Ì·ÖÅäÈÎÎñ¡£
+				//æœ‰ä»»åŠ¡éœ€è¦å¤„ç†ä¸”æœ‰çº¿ç¨‹ç©ºé—²æ—¶ï¼Œåˆ™å°†ç©ºé—²çº¿ç¨‹åˆ†é…ä»»åŠ¡ã€‚
 				while(p->m_objTaskManager.haveTasksTodo()&&p->m_objThreadManager.haveThreadsFree()){
 					p->m_objThreadManager.giveTaskToAThreadTodo(p->m_objTaskManager.popOneTaskTodo());
 				}
 				//WaitForSingleObject(p->m_objThreadManager.m_hPauseEvent, INFINITE);
 				Sleep(1);
 			}
-			//·ñÔò£¬ÏÂÔØÍê³É¡£Ğ£ÑéÍê³É½á¹û£¬ÍË³ö¡£
+			//å¦åˆ™ï¼Œä¸‹è½½å®Œæˆã€‚æ ¡éªŒå®Œæˆç»“æœï¼Œé€€å‡ºã€‚
 			else{
 				p->m_nDownloadStatus = DOWNLOAD_STOP;
 				Sleep(100);

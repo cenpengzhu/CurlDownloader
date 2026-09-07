@@ -6,29 +6,29 @@
 
 using namespace std;
 
-//ÏÂÔØ×´Ì¬ºê
+//ä¸‹è½½çŠ¶æ€å®
 #define DOWNLOAD_RUN 1
 #define DOWNLOAD_PAUSE 2
 #define DOWNLOAD_STOP 0
 
 class  CDownloader {
 public:
-	//Ô¶³ÌÏÂÔØµØÖ·url
+	//è¿œç¨‹ä¸‹è½½åœ°å€url
 	string m_strRemotePath;
-	//±¾µØÏÂÔØµØÖ·
+	//æœ¬åœ°ä¸‹è½½åœ°å€
 	string m_strLocalPath;
-	//ÏÂÔØÈÎÎñĞÅÏ¢ÎÄ¼şµØÖ·
+	//ä¸‹è½½ä»»åŠ¡ä¿¡æ¯æ–‡ä»¶åœ°å€
 	string m_strTaskInfoFilePath;
-	//Ïß³Ì³ØÏß³ÌÊı
+	//çº¿ç¨‹æ± çº¿ç¨‹æ•°
 	int m_nThreadCounts;
-	//ÏÂÔØ×´Ì¬
+	//ä¸‹è½½çŠ¶æ€
 	int m_nDownloadStatus;
-	//ÏÂÔØÕßÏß³Ì¾ä±ú
+	//ä¸‹è½½è€…çº¿ç¨‹å¥æŸ„
 	HANDLE m_hDownloaderThreadHandle;
-	//ÊÇ·ñ´ÓÔ¶³ÌÏÂÔØ
+	//æ˜¯å¦ä»è¿œç¨‹ä¸‹è½½
 	bool m_bIsDownloadedFromRemote;
 
-	//ÏÂÔØĞÅÏ¢
+	//ä¸‹è½½ä¿¡æ¯
 	CDownloadInfo m_objDownloadInfo;
 
 	CDownloadTaskManager m_objTaskManager;
@@ -37,19 +37,19 @@ public:
 	CDownloader(const char * strRemotePath,const char * strLocalPath,const char * strTaskInfoFilePath, int nThreadCounts = 1);
 	~CDownloader(){}	
 
-	//ÏÂÔØ³õÊ¼»¯
+	//ä¸‹è½½åˆå§‹åŒ–
 	errorcode downloadInit();
-	//ÏÂÔØ¿ªÊ¼
+	//ä¸‹è½½å¼€å§‹
 	errorcode downloadBegin();	
-	//ÏÂÔØÍ£Ö¹
+	//ä¸‹è½½åœæ­¢
 	errorcode downloadStop();	
-	//ÏÂÔØÔİÍ£
+	//ä¸‹è½½æš‚åœ
 	errorcode downloadPause();
-	//»ñÈ¡ÏÂÔØĞÅÏ¢
+	//è·å–ä¸‹è½½ä¿¡æ¯
 	int getDownloadInfo();
-	//¹éÁã
+	//å½’é›¶
 	int clear();
-	//ÏÂÔØÕß×ÓÏß³Ì
+	//ä¸‹è½½è€…å­çº¿ç¨‹
 	static unsigned _stdcall  downloaderThread (void * pParam);
 
 };

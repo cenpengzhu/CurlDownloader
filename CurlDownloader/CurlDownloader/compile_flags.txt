@@ -1,0 +1,17 @@
+-xc++
+-std=c++14
+-fms-extensions
+-fms-compatibility
+-fdelayed-template-parsing
+-DWIN32
+-D_WINDOWS
+-DNDEBUG
+-DUNICODE
+-D_UNICODE
+-DDOWNLOADER_EXPORT
+-D_CRT_SECURE_NO_WARNINGS
+-DCURL_STATICLIB
+-Isrc
+-Idependency/curl/include
+-Idependency/tinyxml2/include
+-Idependency/tinyxml2/source

@@ -5,7 +5,7 @@
 
 using namespace std;
 
-//curlÇëÇó»Øµ÷º¯Êı
+//curlè¯·æ±‚å›è°ƒå‡½æ•°
 size_t writeData(void *ptr, size_t size, size_t nmemb, void * pstrstrResponseData){
 
 	stringstream * p = (stringstream *)pstrstrResponseData;
@@ -21,16 +21,16 @@ size_t downloadFunc(void *ptr, size_t size, size_t nmemb, void * pThread){
 	CDownloadThread * pDownloadThread = (CDownloadThread  *)pThread;
 	CDownloadTask * pDownloadTask = (CDownloadTask *)pDownloadThread->m_pThreadTask;
 
-	//Ğ´ÈëÎÄ¼ş´óĞ¡
+	//å†™å…¥æ–‡ä»¶å¤§å°
 	size_t nWritten;
 
-	//ÈÕÖ¾ÎÄ¼ş×Ö·û´®Á÷
+	//æ—¥å¿—æ–‡ä»¶å­—ç¬¦ä¸²æµ
 	stringstream strstrLog;
 
-	//Ëø¶¨»¥³âÁ¿
+	//é”å®šäº’æ–¥é‡
 	WaitForSingleObject(pDownloadThread->m_hDownloadThreadMutex,INFINITE);
 
-	//Ğ´ÈëÎÄ¼ş
+	//å†™å…¥æ–‡ä»¶
 	if ((pDownloadTask->m_llDownloadedPos+nmemb) <= pDownloadTask->m_llEndPos){
 		fseek (pDownloadThread->m_pLocalFile, pDownloadTask->m_llDownloadedPos, SEEK_SET); 
 		nWritten = fwrite (ptr, size, nmemb, pDownloadThread->m_pLocalFile);
@@ -42,23 +42,23 @@ size_t downloadFunc(void *ptr, size_t size, size_t nmemb, void * pThread){
 		pDownloadTask->m_llDownloadedPos = pDownloadTask->m_llEndPos;
 	}
 
-	//²âÊÔ
-	//LOG(INFO)<<"µ±Ç°ÈÎÎñ£º"<<pDownloadTask->m_nTaskId<<"ÒÑÏÂÔØµ½:"<<pDownloadTask->m_llDownloadedPos<<"±¾´ÎÊÕµ½:"<<nmemb<<"±¾´ÎĞ´Èë"<<nWritten;
+	//æµ‹è¯•
+	//LOG(INFO)<<"å½“å‰ä»»åŠ¡ï¼š"<<pDownloadTask->m_nTaskId<<"å·²ä¸‹è½½åˆ°:"<<pDownloadTask->m_llDownloadedPos<<"æœ¬æ¬¡æ”¶åˆ°:"<<nmemb<<"æœ¬æ¬¡å†™å…¥"<<nWritten;
 	//fputs(strstrLog.str().c_str(),pDownloadThread->m_pLogFile);
 
-	//½âËø»¥³âÁ¿
+	//è§£é”äº’æ–¥é‡
 	ReleaseMutex(pDownloadThread->m_hDownloadThreadMutex);
 
 	if (nWritten != nmemb)
 	{
-		//LOG(INFO) << " Thread: " << pDownloadTask->m_nTaskId << " Write Error. Task id£º" << pDownloadTask->m_nTaskId << " Download to:" << pDownloadTask->m_llDownloadedPos << " Receive:" << nmemb << " Write:" << nWritten << " Task EndPos:" << pDownloadTask->m_llEndPos;
+		//LOG(INFO) << " Thread: " << pDownloadTask->m_nTaskId << " Write Error. Task idï¼š" << pDownloadTask->m_nTaskId << " Download to:" << pDownloadTask->m_llDownloadedPos << " Receive:" << nmemb << " Write:" << nWritten << " Task EndPos:" << pDownloadTask->m_llEndPos;
 		//fputs(strstrLog.str().c_str(),pDownloadThread->m_pLogFile);
 	}
 
 	return nWritten;
 }
 
-//curl´íÎóÂë×ª»»
+//curlé”™è¯¯ç è½¬æ¢
 int CLibcurlTool::figureError(CURLcode err){
 	switch (err) 
 	{
@@ -72,7 +72,7 @@ int CLibcurlTool::figureError(CURLcode err){
 		LOG(INFO) << " Curl RemotePath Error";
 		break;
 	case CURLE_NOT_BUILT_IN :
-		LOG(INFO) << " libcurl InitFailed£¬Please Try again!";
+		LOG(INFO) << " libcurl InitFailedï¼ŒPlease Try again!";
 		break;
 	case CURLE_COULDNT_RESOLVE_PROXY :
 		LOG(INFO) << " Cannt resovlve proxy!";
@@ -84,19 +84,19 @@ int CLibcurlTool::figureError(CURLcode err){
 		LOG(INFO) << " Curl Connect Server Error";
 		break;
 	case CURLE_FTP_WEIRD_SERVER_REPLY :
-		LOG(INFO) << " FTP·şÎñÆ÷·Ç·¨»Ø¸´";
+		LOG(INFO) << " FTPæœåŠ¡å™¨éæ³•å›å¤";
 		break;
 	case CURLE_REMOTE_ACCESS_DENIED :
 		LOG(INFO) << " Acess Denied!";
 		break;
 	case CURLE_FTP_ACCEPT_FAILED :
-		LOG(INFO) << " FTPÁ¬½ÓÊ§°Ü";
+		LOG(INFO) << " FTPè¿æ¥å¤±è´¥";
 		break;
 	case CURLE_FTP_WEIRD_PASS_REPLY :
-		LOG(INFO) << " FTP·şÎñÆ÷Î´Öª»Ø¸´";
+		LOG(INFO) << " FTPæœåŠ¡å™¨æœªçŸ¥å›å¤";
 		break;
 	case CURLE_FTP_ACCEPT_TIMEOUT :
-		LOG(INFO) << " FTPÁ¬½Ó³¬Ê±";
+		LOG(INFO) << " FTPè¿æ¥è¶…æ—¶";
 		break;
 	case CURLE_FTP_WEIRD_PASV_REPLY :
 		LOG(INFO) << " Curl unknow error!";
@@ -105,40 +105,40 @@ int CLibcurlTool::figureError(CURLcode err){
 		LOG(INFO) << " Curl unknow error!";
 		break;
 	case CURLE_FTP_CANT_GET_HOST :
-		LOG(INFO) << " ÄÚ²¿¹ÊÕÏ";
+		LOG(INFO) << " å†…éƒ¨æ•…éšœ";
 		break;
 	case CURLE_HTTP2 :
-		LOG(INFO) << " HTTP2´íÎó";
+		LOG(INFO) << " HTTP2é”™è¯¯";
 		break;
 	case CURLE_FTP_COULDNT_SET_TYPE :
-		LOG(INFO) << " FTP»ñÈ¡´«ÊäÀàĞÍÊ§°Ü";
+		LOG(INFO) << " FTPè·å–ä¼ è¾“ç±»å‹å¤±è´¥";
 		break;
 	case CURLE_PARTIAL_FILE :
-		LOG(INFO) << " ·şÎñÆ÷·µ»ØÎÄ¼ş´óĞ¡·Ç·¨";
+		LOG(INFO) << " æœåŠ¡å™¨è¿”å›æ–‡ä»¶å¤§å°éæ³•";
 		break;
 	case CURLE_HTTP_RETURNED_ERROR :
-		LOG(INFO) << " HTTPÇëÇó´íÎó";
+		LOG(INFO) << " HTTPè¯·æ±‚é”™è¯¯";
 		break;
 	case CURLE_WRITE_ERROR :
-		LOG(INFO) << " ½ÓÊÕÊı¾İ´íÎó";
+		LOG(INFO) << " æ¥æ”¶æ•°æ®é”™è¯¯";
 		break;
 	case CURLE_UPLOAD_FAILED :
-		LOG(INFO) << " ÉÏ´«Êı¾İ´íÎó";
+		LOG(INFO) << " ä¸Šä¼ æ•°æ®é”™è¯¯";
 		break;
 	case CURLE_READ_ERROR :
-	    LOG(INFO) << " ±¾µØÎÄ¼ş¶ÁÈ¡´íÎó";
+	    LOG(INFO) << " æœ¬åœ°æ–‡ä»¶è¯»å–é”™è¯¯";
 		break;
 	case CURLE_OUT_OF_MEMORY :
-		LOG(INFO) << " ÄÚ´æ²»×ã";
+		LOG(INFO) << " å†…å­˜ä¸è¶³";
 		break;
 	case CURLE_OPERATION_TIMEDOUT :
 		LOG(INFO) << " Curl Time out";
 		break;
 	case CURLE_FTP_PORT_FAILED :
-		LOG(INFO) << " FTP¶Ë¿ÚÊ§°Ü";
+		LOG(INFO) << " FTPç«¯å£å¤±è´¥";
 		break;
 	case CURLE_RANGE_ERROR :
-	    LOG(INFO) << " ÇëÇóµÄÊı¾İ·¶Î§´íÎó";
+	    LOG(INFO) << " è¯·æ±‚çš„æ•°æ®èŒƒå›´é”™è¯¯";
 		break;
 	default:
 		LOG(INFO) << " Curl Else Error";
@@ -148,60 +148,60 @@ int CLibcurlTool::figureError(CURLcode err){
 }
 
 
-//http»ñÈ¡ÄÚÈİ
+//httpè·å–å†…å®¹
 CURLcode CLibcurlTool::httpGetContent(const char * strUrl , long long llStartPos , long long llEndPos , char * pResponseData){
 	return httpGet(strUrl,llStartPos,llEndPos,0,pResponseData);
 }
 
-//http»ñÈ¡header£¨Ò»°ã»ñÈ¡Ç°500×Ö½ÚµÄÊı¾İ£©
+//httpè·å–headerï¼ˆä¸€èˆ¬è·å–å‰500å­—èŠ‚çš„æ•°æ®ï¼‰
 CURLcode CLibcurlTool::httpGetHeader(const char * strUrl , char * pResponseData){
 	return httpGet(strUrl,0,2000,1,pResponseData);
 }
 
-//httpÏÂÔØÎÄ¼ş
+//httpä¸‹è½½æ–‡ä»¶
 CURLcode CLibcurlTool::httpDownloadContent(const char * strUrl , long long llStartPos , long long llEndPos , CDownloadThread * pThread){
 	CURLcode err;
 
-	//¸ñÊ½»¯ÏÂÔØÎÄ¼ş·¶Î§×Ö·û´®
+	//æ ¼å¼åŒ–ä¸‹è½½æ–‡ä»¶èŒƒå›´å­—ç¬¦ä¸²
 	string strRange;
 	stringstream strstrRange;
 	strstrRange<<llStartPos<<"-"<<llEndPos;
 	strRange = strstrRange.str();
 	//LOG(INFO) << " Request Range: " << strRange.c_str();
 
-	//´ò¿ªÈÕÖ¾ÎÄ¼ş
+	//æ‰“å¼€æ—¥å¿—æ–‡ä»¶
 	string strLogFilePath = "c:\\log";
 	//strLogFilePath.push_back('0'+pDivide->m_nDivideNO);
 	strLogFilePath = strLogFilePath + ".log";
 	//pDivide->m_pLogFile = fopen(strLogFilePath.c_str(),"w");
 
-	//curlÉèÖÃurl
+	//curlè®¾ç½®url
 	curl_easy_setopt(m_pCurl, CURLOPT_URL, strUrl); 
 
-	//curlÉèÖÃ²»·¢ËÍÆäËûĞÅºÅ
+	//curlè®¾ç½®ä¸å‘é€å…¶ä»–ä¿¡å·
 	curl_easy_setopt(m_pCurl, CURLOPT_NOSIGNAL, 1);
 
-	//curlÉèÖÃÏÂÔØÎÄ¼ş·¶Î§
+	//curlè®¾ç½®ä¸‹è½½æ–‡ä»¶èŒƒå›´
 	curl_easy_setopt(m_pCurl, CURLOPT_RANGE, strRange.c_str());
 
-    //curlÉèÖÃÖØ¶¨Ïò
+    //curlè®¾ç½®é‡å®šå‘
 	//curl_easy_setopt(m_pCurl, CURLOPT_FOLLOWLOCATION, 1);
 
-	//curlÉèÖÃĞ´Êı¾İ»Øµ÷º¯Êı£¨ÔÚÊı¾İ·µ»ØÊ±µ÷ÓÃ£©
+	//curlè®¾ç½®å†™æ•°æ®å›è°ƒå‡½æ•°ï¼ˆåœ¨æ•°æ®è¿”å›æ—¶è°ƒç”¨ï¼‰
 	curl_easy_setopt(m_pCurl, CURLOPT_WRITEFUNCTION, downloadFunc);
 
-	//curlÉèÖÃĞ´Êı¾İbuff£¨Êı¾İ·µ»ØÊ±×îÖÕµÄ´æ´¢Î»ÖÃ£©
+	//curlè®¾ç½®å†™æ•°æ®buffï¼ˆæ•°æ®è¿”å›æ—¶æœ€ç»ˆçš„å­˜å‚¨ä½ç½®ï¼‰
 	curl_easy_setopt(m_pCurl, CURLOPT_WRITEDATA, (void *)pThread);
 
-	//curlÉèÖÃ³¬Ê±
+	//curlè®¾ç½®è¶…æ—¶
 	curl_easy_setopt(m_pCurl, CURLOPT_TIMEOUT, 10);
 
-	//curlÉèÖÃÁ¬½Ó³¬Ê±
+	//curlè®¾ç½®è¿æ¥è¶…æ—¶
 	curl_easy_setopt(m_pCurl, CURLOPT_CONNECTTIMEOUT, 3);
 
-	//curlÉèÖÃÖ§³Öhttps
+	//curlè®¾ç½®æ”¯æŒhttps
     err = curl_easy_setopt(m_pCurl, CURLOPT_SSL_VERIFYPEER, false);
-	curl_easy_setopt(m_pCurl, CURLOPT_SSL_VERIFYPEER, 0L);   //²»ÑéÖ¤Ö¤ÊéºÍHOST
+	curl_easy_setopt(m_pCurl, CURLOPT_SSL_VERIFYPEER, 0L);   //ä¸éªŒè¯è¯ä¹¦å’ŒHOST
 	curl_easy_setopt(m_pCurl, CURLOPT_SSL_VERIFYHOST, 0L);
 
 
@@ -212,7 +212,7 @@ CURLcode CLibcurlTool::httpDownloadContent(const char * strUrl , long long llSta
 
 
 
-	//curl interfaceÖ´ĞĞ
+	//curl interfaceæ‰§è¡Œ
 	err = curl_easy_perform(m_pCurl);
 
 	if (err != CURLE_OK )
@@ -227,25 +227,25 @@ CURLcode CLibcurlTool::httpGet(const char * strUrl , long long llStartPos , long
 
 	CURLcode objCurlcode;
 
-	//¸ñÊ½»¯ÏÂÔØÎÄ¼ş·¶Î§×Ö·û´®
+	//æ ¼å¼åŒ–ä¸‹è½½æ–‡ä»¶èŒƒå›´å­—ç¬¦ä¸²
 	string strRange;
 	stringstream strstrRange;
 	strstrRange<<llStartPos<<"-"<<llEndPos;
 	strRange = strstrRange.str();
 
-	//´´½¨×Ö·û´®Á÷
+	//åˆ›å»ºå­—ç¬¦ä¸²æµ
 	stringstream strstrResponseData;
 
-	//curlÉèÖÃurl
+	//curlè®¾ç½®url
 	curl_easy_setopt(m_pCurl, CURLOPT_URL, strUrl); 
 
-	//curlÉèÖÃ²»·¢ËÍÆäËûĞÅºÅ
+	//curlè®¾ç½®ä¸å‘é€å…¶ä»–ä¿¡å·
 	curl_easy_setopt(m_pCurl, CURLOPT_NOSIGNAL, 1);
 
-	//curlÉèÖÃ×·×ÙÖØ¶¨Ïò
+	//curlè®¾ç½®è¿½è¸ªé‡å®šå‘
 	//curl_easy_setopt(m_pCurl, CURLOPT_FOLLOWLOCATION, 1);
 
-	//curlÉèÖÃÊÇ·ñ»ñÈ¡httpÍ·
+	//curlè®¾ç½®æ˜¯å¦è·å–httpå¤´
 	if (nHeaderFlag == 1)
 	{
 		curl_easy_setopt(m_pCurl, CURLOPT_NOBODY, 1);
@@ -253,19 +253,19 @@ CURLcode CLibcurlTool::httpGet(const char * strUrl , long long llStartPos , long
 	}
 	//curl_easy_setopt(m_pCurl, CURLOPT_HEADER, 1);
 
-	//curlÉèÖÃÏÂÔØÎÄ¼ş·¶Î§
+	//curlè®¾ç½®ä¸‹è½½æ–‡ä»¶èŒƒå›´
 	//curl_easy_setopt(m_pCurl, CURLOPT_RANGE, strRange.c_str());
 
-	//curlÉèÖÃĞ´Êı¾İ»Øµ÷º¯Êı£¨ÔÚÊı¾İ·µ»ØÊ±µ÷ÓÃ£©
+	//curlè®¾ç½®å†™æ•°æ®å›è°ƒå‡½æ•°ï¼ˆåœ¨æ•°æ®è¿”å›æ—¶è°ƒç”¨ï¼‰
 	curl_easy_setopt(m_pCurl, CURLOPT_WRITEFUNCTION , writeData);
 
-	//curlÉèÖÃĞ´Êı¾İbuff£¨Êı¾İ·µ»ØÊ±×îÖÕµÄ´æ´¢Î»ÖÃ£©
+	//curlè®¾ç½®å†™æ•°æ®buffï¼ˆæ•°æ®è¿”å›æ—¶æœ€ç»ˆçš„å­˜å‚¨ä½ç½®ï¼‰
 	curl_easy_setopt(m_pCurl, CURLOPT_WRITEDATA , (void *)&strstrResponseData);
 
-	//curlÉèÖÃÖ§³Öhttps
+	//curlè®¾ç½®æ”¯æŒhttps
 	objCurlcode = curl_easy_setopt(m_pCurl, CURLOPT_SSL_VERIFYPEER, false);
 
-	curl_easy_setopt(m_pCurl, CURLOPT_SSL_VERIFYPEER, 0L);   //²»ÑéÖ¤Ö¤ÊéºÍHOST
+	curl_easy_setopt(m_pCurl, CURLOPT_SSL_VERIFYPEER, 0L);   //ä¸éªŒè¯è¯ä¹¦å’ŒHOST
 	curl_easy_setopt(m_pCurl, CURLOPT_SSL_VERIFYHOST, 0L);
 
 	if (objCurlcode != CURLE_OK) {
@@ -273,10 +273,10 @@ CURLcode CLibcurlTool::httpGet(const char * strUrl , long long llStartPos , long
 		return objCurlcode;
 	}
 
-	//curl interfaceÖ´ĞĞ
+	//curl interfaceæ‰§è¡Œ
 	objCurlcode = curl_easy_perform(m_pCurl);
 
-	//curl ´íÎó´¦Àí
+	//curl é”™è¯¯å¤„ç†
 
 	strncpy(pResponseData,strstrResponseData.str().c_str(),2000);
 
@@ -288,47 +288,47 @@ CURLcode CLibcurlTool::httpGet(const char * strUrl , long long llStartPos , long
 	return objCurlcode;
 }
 
-	//httpÏÂÔØÎÄ¼ş
+	//httpä¸‹è½½æ–‡ä»¶
 	/*CURLcode httpDownloadContent(const char * strUrl , long long llStartPos , long long llEndPos , CDivide * pDivide){
 		CURLcode err;
 
-		//¸ñÊ½»¯ÏÂÔØÎÄ¼ş·¶Î§×Ö·û´®
+		//æ ¼å¼åŒ–ä¸‹è½½æ–‡ä»¶èŒƒå›´å­—ç¬¦ä¸²
 		string strRange;
 		stringstream strstrRange;
 		strstrRange<<llStartPos<<"-"<<llEndPos;
 		strRange = strstrRange.str();
 
-		//´ò¿ªÈÕÖ¾ÎÄ¼ş
+		//æ‰“å¼€æ—¥å¿—æ–‡ä»¶
 		string strLogFilePath = "c:\\log";
 		strLogFilePath.push_back('0'+pDivide->m_nDivideNO);
 		strLogFilePath = strLogFilePath + ".log";
 		pDivide->m_pLogFile = fopen(strLogFilePath.c_str(),"w");
 
-		//curlÉèÖÃurl
+		//curlè®¾ç½®url
 		curl_easy_setopt(m_pCurl, CURLOPT_URL, strUrl); 
 
-		//curlÉèÖÃ²»·¢ËÍÆäËûĞÅºÅ
+		//curlè®¾ç½®ä¸å‘é€å…¶ä»–ä¿¡å·
 		curl_easy_setopt(m_pCurl, CURLOPT_NOSIGNAL, 1);
 
-		//curlÉèÖÃÏÂÔØÎÄ¼ş·¶Î§
+		//curlè®¾ç½®ä¸‹è½½æ–‡ä»¶èŒƒå›´
 		curl_easy_setopt(m_pCurl, CURLOPT_RANGE, strRange.c_str());
 
-		//curlÉèÖÃĞ´Êı¾İ»Øµ÷º¯Êı£¨ÔÚÊı¾İ·µ»ØÊ±µ÷ÓÃ£©
+		//curlè®¾ç½®å†™æ•°æ®å›è°ƒå‡½æ•°ï¼ˆåœ¨æ•°æ®è¿”å›æ—¶è°ƒç”¨ï¼‰
 		curl_easy_setopt(m_pCurl, CURLOPT_WRITEFUNCTION, downloadData);
 
-		//curlÉèÖÃĞ´Êı¾İbuff£¨Êı¾İ·µ»ØÊ±×îÖÕµÄ´æ´¢Î»ÖÃ£©
+		//curlè®¾ç½®å†™æ•°æ®buffï¼ˆæ•°æ®è¿”å›æ—¶æœ€ç»ˆçš„å­˜å‚¨ä½ç½®ï¼‰
 		curl_easy_setopt(m_pCurl, CURLOPT_WRITEDATA, (void *)pDivide);
 
-		//curlÉèÖÃÏÂÔØÊÇÏÔÊ¾½ø¶È
+		//curlè®¾ç½®ä¸‹è½½æ˜¯æ˜¾ç¤ºè¿›åº¦
 		curl_easy_setopt(m_pCurl, CURLOPT_NOPROGRESS, 0L);
 
-		//curlÉèÖÃ½ø¶È»Øµ÷º¯Êı
+		//curlè®¾ç½®è¿›åº¦å›è°ƒå‡½æ•°
 		curl_easy_setopt(m_pCurl, CURLOPT_XFERINFOFUNCTION, getProgress);
 
-		//curlÉèÖÃ½ø¶È»Øµ÷º¯Êı´«²Î
+		//curlè®¾ç½®è¿›åº¦å›è°ƒå‡½æ•°ä¼ å‚
 		curl_easy_setopt(m_pCurl, CURLOPT_XFERINFODATA, (void *)pDivide);
 
-		//curl interfaceÖ´ĞĞ
+		//curl interfaceæ‰§è¡Œ
 		err = curl_easy_perform(m_pCurl);
 
 		if (err != CURLE_OK )
@@ -337,7 +337,7 @@ CURLcode CLibcurlTool::httpGet(const char * strUrl , long long llStartPos , long
 		}
 		else{
 			stringstream strstrLog;
-			strstrLog<<"Ïß³Ì£º"<<pDivide->m_nDivideNO<<"³É¹¦½áÊø£¡";
+			strstrLog<<"çº¿ç¨‹ï¼š"<<pDivide->m_nDivideNO<<"æˆåŠŸç»“æŸï¼";
 			fputs(strstrLog.str().c_str(),pDivide->m_pLogFile);
 		}
 
@@ -345,24 +345,24 @@ CURLcode CLibcurlTool::httpGet(const char * strUrl , long long llStartPos , long
 
 	}*/
 
-//curlÏÂÔØ»Øµ÷º¯Êı
+//curlä¸‹è½½å›è°ƒå‡½æ•°
 /*size_t downloadData(void *ptr, size_t size, size_t nmemb, void * pDivide){
 
 	CDivide * p = (CDivide  *)pDivide;
 
-	//Ğ´ÈëÎÄ¼ş´óĞ¡
+	//å†™å…¥æ–‡ä»¶å¤§å°
 	size_t nWritten;
 
-	//ÈÕÖ¾ÎÄ¼ş×Ö·û´®Á÷
+	//æ—¥å¿—æ–‡ä»¶å­—ç¬¦ä¸²æµ
 	stringstream strstrLog;
 
-	//Ëø¶¨»¥³âÁ¿
+	//é”å®šäº’æ–¥é‡
 	WaitForSingleObject(p->m_hDownloadThreadMutex,INFINITE);
 
-	//²âÊÔ
-	//strstrLog<<"ÏÂÔØ»Øµ÷º¯ÊıÊä³ö,ÊÕµ½Êı¾İ:"<<nmemb<<"×Ö½Ú";
+	//æµ‹è¯•
+	//strstrLog<<"ä¸‹è½½å›è°ƒå‡½æ•°è¾“å‡º,æ”¶åˆ°æ•°æ®:"<<nmemb<<"å­—èŠ‚";
 
-    //Ğ´ÈëÎÄ¼ş
+    //å†™å…¥æ–‡ä»¶
 	if (p->m_llDownloadToPos+nmemb <= p->m_llEndPos){
 		fseek (p->m_pLocalFile, p->m_llDownloadToPos, SEEK_SET); 
 		if (size != 1)
@@ -372,7 +372,7 @@ CURLcode CLibcurlTool::httpGet(const char * strUrl , long long llStartPos , long
 		nWritten = fwrite (ptr, size, nmemb, p->m_pLocalFile);
 		if (nWritten != nmemb)
 		{
-			//LOG(INFO)<<"Ğ´´íÎó";
+			//LOG(INFO)<<"å†™é”™è¯¯";
 		}
 		p->m_llDownloadToPos = p->m_llDownloadToPos + nmemb;
 	} 
@@ -381,24 +381,24 @@ CURLcode CLibcurlTool::httpGet(const char * strUrl , long long llStartPos , long
 		nWritten = fwrite (ptr, 1, p->m_llEndPos-p->m_llDownloadToPos+1, p->m_pLocalFile);
 		p->m_llDownloadToPos = p->m_llEndPos;
 	}
-	strstrLog<<"Ïß³Ì:"<<p->m_nDivideNO<<"ÏÂÔØµ½:"<<p->m_llDownloadToPos<<"Ğ´Èë:"<<nWritten<<"ÊÕµ½:"<<nmemb;
+	strstrLog<<"çº¿ç¨‹:"<<p->m_nDivideNO<<"ä¸‹è½½åˆ°:"<<p->m_llDownloadToPos<<"å†™å…¥:"<<nWritten<<"æ”¶åˆ°:"<<nmemb;
 
 	fputs(strstrLog.str().c_str(),p->m_pLogFile);
 	
-	//½âËø»¥³âÁ¿
+	//è§£é”äº’æ–¥é‡
 	ReleaseMutex(p->m_hDownloadThreadMutex);
 
-	//²âÊÔ
-	////LOG(INFO)<<"Ïß³Ì£º"<<p->m_nDivideNO<<"ÏÂÔØ»Øµ÷º¯ÊıÊä³ö£¬ÒÑÏÂÔØ:"<<p->m_llDownloadToPos<<"×Ü¹²ĞèÏÂÔØ£º"<< p->m_llEndPos-p->m_llStartPos+1;
+	//æµ‹è¯•
+	////LOG(INFO)<<"çº¿ç¨‹ï¼š"<<p->m_nDivideNO<<"ä¸‹è½½å›è°ƒå‡½æ•°è¾“å‡ºï¼Œå·²ä¸‹è½½:"<<p->m_llDownloadToPos<<"æ€»å…±éœ€ä¸‹è½½ï¼š"<< p->m_llEndPos-p->m_llStartPos+1;
 
 	return nWritten;
 
 } */
 
 
-//curlÏÂÔØ½ø¶È»Øµ÷º¯Êı
+//curlä¸‹è½½è¿›åº¦å›è°ƒå‡½æ•°
 int getProgress(void *ptr, curl_off_t  dlTotal, curl_off_t  dlNow, curl_off_t  ulTotal, curl_off_t  ulNow)  
 {
-	////LOG(INFO)<<"½ø¶È»Øµ÷º¯ÊıĞÅÏ¢ÏÂÔØ×ÜÊı£º"<<dlTotal<<", ÒÑÏÂÔØÊı:"<<dlNow;
+	////LOG(INFO)<<"è¿›åº¦å›è°ƒå‡½æ•°ä¿¡æ¯ä¸‹è½½æ€»æ•°ï¼š"<<dlTotal<<", å·²ä¸‹è½½æ•°:"<<dlNow;
 	return 0;
 }

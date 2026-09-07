@@ -16,14 +16,14 @@ int __declspec(dllexport) CurlDownloadFile(const char *szURL, const char *szFile
 	strLogFilePath = strLocalPath;
 	strLogFilePath.append(".log");
 
-	//ÉèÖÃÈÕÖ¾ÐÅÏ¢
+	//è®¾ç½®æ—¥å¿—ä¿¡æ¯
 	el::Configurations LogConf;
 	LogConf.setToDefault();
 	LogConf.set(el::Level::Info, el::ConfigurationType::Format, "%datetime--[Thread](%thread) %msg");
 	LogConf.set(el::Level::Info, el::ConfigurationType::Enabled, "true");
 	LogConf.set(el::Level::Info, el::ConfigurationType::ToStandardOutput, "true");
 	LogConf.set(el::Level::Info, el::ConfigurationType::ToFile, "true");
-	//ÈÕÖ¾¼ÇÂ¼ÔÚÏÂÔØÄ¿Â¼
+	//æ—¥å¿—è®°å½•åœ¨ä¸‹è½½ç›®å½•
 	LogConf.set(el::Level::Info, el::ConfigurationType::Filename, strLogFilePath.c_str());
 	el::Loggers::reconfigureLogger("default", LogConf);
 
@@ -34,39 +34,39 @@ int __declspec(dllexport) CurlDownloadFile(const char *szURL, const char *szFile
 	if (objDownloader.downloadInit() != noerror)
 	{
 		objDownloader.downloadStop();
-		//µÈ´ýÏÂÔØÏß³ÌÍË³ö
+		//ç­‰å¾…ä¸‹è½½çº¿ç¨‹é€€å‡º
 		WaitForSingleObject(objDownloader.m_hDownloaderThreadHandle, INFINITE);
 		return -1;
 	}
 	objDownloader.downloadBegin();
 
-	//ÏÂÔØËÙ¶ÈÎª0µÄÁ¬ÐøÊ±¼ä¡£
+	//ä¸‹è½½é€Ÿåº¦ä¸º0çš„è¿žç»­æ—¶é—´ã€‚
 	long long llCurrenttime = 0;
 	long long llCurrentDownloadedLength = 0;
 	while (true) {
-		//¼ì²âÍøÂçÊÇ·ñÁ¬Í¨£¬·ñÔò±¨´í,Í£Ö¹ÏÂÔØ¡£
+		//æ£€æµ‹ç½‘ç»œæ˜¯å¦è¿žé€šï¼Œå¦åˆ™æŠ¥é”™,åœæ­¢ä¸‹è½½ã€‚
 		DWORD flags;
 		if (!InternetGetConnectedState(&flags, 0))
 		{
 			objDownloader.downloadStop();
-			//µÈ´ýÏÂÔØÏß³ÌÍË³ö
+			//ç­‰å¾…ä¸‹è½½çº¿ç¨‹é€€å‡º
 			WaitForSingleObject(objDownloader.m_hDownloaderThreadHandle, INFINITE);
 
 			return -2;
 		}
 		if (objDownloader.m_objDownloadInfo.m_llTotalDownloadedLength > llCurrentDownloadedLength)
 		{
-			//Èç¹ûÓÐÏÂÔØËÙ¶È µ±Ç°ÏÂÔØÁ¿¸üÐÂ µ±Ç°ÏÂÔØÊ±¼ä¸üÐÂ
+			//å¦‚æžœæœ‰ä¸‹è½½é€Ÿåº¦ å½“å‰ä¸‹è½½é‡æ›´æ–° å½“å‰ä¸‹è½½æ—¶é—´æ›´æ–°
 			llCurrentDownloadedLength = objDownloader.m_objDownloadInfo.m_llTotalDownloadedLength;
 			llCurrenttime = objDownloader.m_objDownloadInfo.m_dwTime;
 		}
 		else if (objDownloader.m_objDownloadInfo.m_llTotalDownloadedLength = llCurrentDownloadedLength)
 		{
-			//³¬¹ý30ÃëÃ»ÓÐËÙ¶ÈÔòÈÏÎªÏÂÔØÊ§°Ü
+			//è¶…è¿‡30ç§’æ²¡æœ‰é€Ÿåº¦åˆ™è®¤ä¸ºä¸‹è½½å¤±è´¥
 			if (objDownloader.m_objDownloadInfo.m_dwTime - llCurrenttime >= 30000)
 			{
 				objDownloader.downloadStop();
-				//µÈ´ýÏÂÔØÏß³ÌÍË³ö
+				//ç­‰å¾…ä¸‹è½½çº¿ç¨‹é€€å‡º
 				WaitForSingleObject(objDownloader.m_hDownloaderThreadHandle, INFINITE);
 				return -3;
 			}
@@ -75,12 +75,12 @@ int __declspec(dllexport) CurlDownloadFile(const char *szURL, const char *szFile
 
 		if (objDownloader.m_nDownloadStatus == THREAD_STOP)
 		{
-			//µÈ´ýÏÂÔØÏß³ÌÍË³ö
+			//ç­‰å¾…ä¸‹è½½çº¿ç¨‹é€€å‡º
 			WaitForSingleObject(objDownloader.m_hDownloaderThreadHandle, INFINITE);
-			//¸üÐÂÏÂÔØÐÅÏ¢
+			//æ›´æ–°ä¸‹è½½ä¿¡æ¯
 			objDownloader.getDownloadInfo();
 
-			//Èç¹ûÏÂÔØÍê³É£¬ÇÒÏÂÔØ´ÓÔ¶³Ì·þÎñÆ÷ÏÂÔØÊý¾Ý
+			//å¦‚æžœä¸‹è½½å®Œæˆï¼Œä¸”ä¸‹è½½ä»Žè¿œç¨‹æœåŠ¡å™¨ä¸‹è½½æ•°æ®
 			if (objDownloader.m_objDownloadInfo.m_llTotalDownloadedLength >= objDownloader.m_objTaskManager.m_llContentLength)
 			{
 				if (objDownloader.m_bIsDownloadedFromRemote == false)

@@ -4,14 +4,14 @@
 
 class CDownloadTask : public CTask {
 public:
-	//ÏÂÔØµØÖ·URL
+	//ä¸‹è½½åœ°å€URL
 	string m_strRemotePath;
-	//±¾µØµØÖ·
+	//æœ¬åœ°åœ°å€
 	string m_strLocalPath;
-	//¿ªÊ¼Î»ÖÃ
+	//å¼€å§‹ä½ç½®
 	long long m_llStartPos;
-	//½áÊøÎ»ÖÃ
+	//ç»“æŸä½ç½®
 	long long m_llEndPos;
-	//ÒÑÏÂÔØÎ»ÖÃ
+	//å·²ä¸‹è½½ä½ç½®
 	long long m_llDownloadedPos;
 };

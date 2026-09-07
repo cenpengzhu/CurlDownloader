@@ -8,28 +8,28 @@
 
 using namespace std;
 
-//Ïß³Ì×´Ì¬ºê
+//çº¿ç¨‹çŠ¶æ€å®
 #define THREAD_PAUSE 2
 #define THREAD_RUN 1
 #define THREAD_STOP 0
 
 class CThread {
 public:
-	//Ïß³Ì¾ä±ú
+	//çº¿ç¨‹å¥æŸ„
 	HANDLE m_hThreadHandle;
-	//Ïß³Ì×´Ì¬
+	//çº¿ç¨‹çŠ¶æ€
 	std::atomic<int> m_nThreadStatus;
-	//Ïß³ÌÈÎÎñ
+	//çº¿ç¨‹ä»»åŠ¡
 	CTask * m_pThreadTask;
-	//Ğ´ÎÄ¼ş»¥³âÁ¿¾ä±ú
+	//å†™æ–‡ä»¶äº’æ–¥é‡å¥æŸ„
 	HANDLE m_hDownloadThreadMutex;
-	//RUNÊÂ¼ş¾ä±ú
+	//RUNäº‹ä»¶å¥æŸ„
 	HANDLE m_hRunEvent;
-	//PauseÊÂ¼ş¾ä±ú
+	//Pauseäº‹ä»¶å¥æŸ„
 	HANDLE m_hPauseEvent;
-	//ÈÕÖ¾ÎÄ¼ş
+	//æ—¥å¿—æ–‡ä»¶
 	FILE * m_pLogFile;
-	//ÈÕÖ¾ÎÄ¼şÂ·¾¶
+	//æ—¥å¿—æ–‡ä»¶è·¯å¾„
 	string m_strLogFilePath;
 
 
@@ -40,7 +40,7 @@ public:
 		m_hRunEvent = CreateEvent(NULL, 0, 0, NULL);
 		m_hPauseEvent = hPauseEvent;
 	}
-	//Ïß³Ìº¯Êı
+	//çº¿ç¨‹å‡½æ•°
 	static unsigned _stdcall  ThreadFunc (void * pParam){
 		CThread * p = (CThread * )pParam;
 		while(true){ 
@@ -62,7 +62,7 @@ public:
 		return 1;
 	}
 
-	//³õÊ¼»¯
+	//åˆå§‹åŒ–
 	int init(){
 		m_hThreadHandle = (HANDLE)_beginthreadex(NULL,0,&CThread::ThreadFunc,(LPVOID)this,0,NULL);
 		stringstream strstrLogFilePath;
@@ -77,25 +77,25 @@ public:
 	//	}
 		return 1;
 	}
-	//Ö´ĞĞTask
+	//æ‰§è¡ŒTask
 	int doTask(CTask * pTask){
 		setTask(pTask);
 		Run();
 		return 1;
 	}
-	//ÉèÖÃTask
+	//è®¾ç½®Task
 	int setTask(CTask * pTask){
 		m_pThreadTask = pTask;
 		return 1;
 	}
-	//¿ªÊ¼Ö´ĞĞ
+	//å¼€å§‹æ‰§è¡Œ
 	int Run(){
 		m_nThreadStatus = THREAD_RUN;
 		SetEvent(m_hRunEvent);
 		return 1;
 	}
 
-	//¾ßÌåµÄÒµÎñº¯Êı
+	//å…·ä½“çš„ä¸šåŠ¡å‡½æ•°
 	virtual int taskBusiness() {
 		return 1;
 	}

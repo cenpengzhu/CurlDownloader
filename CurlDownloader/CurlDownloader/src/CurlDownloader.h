@@ -10,5 +10,5 @@
 #endif
 
 
-//·µ»ØÖµ-1,ÏÂÔØÆ÷³õÊ¼»¯Ê§°Ü -2,ÍøÂçÁ¬½ÓÊ§°Ü -3,³¬¹ı30sÃ»ËÙ¶È 1,ÏÂÔØ³É¹¦
+//è¿”å›å€¼-1,ä¸‹è½½å™¨åˆå§‹åŒ–å¤±è´¥ -2,ç½‘ç»œè¿æ¥å¤±è´¥ -3,è¶…è¿‡30sæ²¡é€Ÿåº¦ 1,ä¸‹è½½æˆåŠŸ
 int  __declspec(dllexport) CurlDownloadFile(const char *szURL, const char *szFilePath,long long &llTotalContent,long long &llCurrentContent ,int ThreadCount = 1);

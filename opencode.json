@@ -1,0 +1,36 @@
+{
+  // 项目级 opencode 配置（继承 ~/.config/opencode/opencode.json 后深度合并）
+  "$schema": "https://opencode.ai/config.json",
+
+  // 启用内置 LSP（对象形式 = 保留内置 server + 下面的覆盖项）
+  "lsp": {
+    // C/C++：clangd。opencode 会为 C/C++ 项目自动下载 clangd，
+    // 若本机已装 LLVM，把 command 改为绝对路径即可复用。
+    // 编译参数由 CurlDownloader/CurlDownloader/compile_flags.txt 提供。
+    "clangd": {
+      "command": [
+        "clangd",
+        "--background-index",
+        "--clang-tidy",
+        "--header-insertion=never",
+        "--pch-storage=memory",
+        "--offset-encoding=utf-16"
+      ],
+      "extensions": [".c", ".cpp", ".cc", ".cxx", ".h", ".hpp", ".hh", ".hxx"]
+    }
+  },
+
+  // 本仓库是纯 C++/MSBuild 项目，关掉与之无关的自动格式化
+  "formatter": false,
+
+  "permission": {
+    "lsp": "allow",
+    "bash": {
+      "*": "ask",
+      "git status": "allow",
+      "git diff*": "allow",
+      "git log*": "allow",
+      "msbuild*": "ask"
+    }
+  }
+}

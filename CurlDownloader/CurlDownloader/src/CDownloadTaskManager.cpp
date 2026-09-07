@@ -15,7 +15,7 @@ CDownloadTaskManager::CDownloadTaskManager(const char * strRemotePath,const char
 	m_llContentLength = 0;
 }
 
-//Éú³ÉÏÂÔØÈÎÎñ--ĞÂ½¨µÄÏÂÔØÈÎÎñ
+//ç”Ÿæˆä¸‹è½½ä»»åŠ¡--æ–°å»ºçš„ä¸‹è½½ä»»åŠ¡
 errorcode CDownloadTaskManager::generateDownloadTask(){
 	long long llContentLength;
 	llContentLength = getContentLength(); 
@@ -29,7 +29,7 @@ errorcode CDownloadTaskManager::generateDownloadTask(){
 	CDownloadTask * pDownloadTaskTemp;
 	int nHowManyM = (int)(llContentLength / MEGABYTES);
 
-	//Ò»¸öÈÎÎñ·Ö1M,²»×ã1MµÄ£¬·ÖÒ»¸öÈÎÎñÀ´×ö
+	//ä¸€ä¸ªä»»åŠ¡åˆ†1M,ä¸è¶³1Mçš„ï¼Œåˆ†ä¸€ä¸ªä»»åŠ¡æ¥åš
 	if (nHowManyM == 0 && llContentLength != 0)
 	{
 		m_nTasksCount = 1;
@@ -65,23 +65,23 @@ errorcode CDownloadTaskManager::generateDownloadTask(){
 	return noerror;
 }
 
-//´ÓÎÄ¼şÖĞ¼ÓÔØÏÂÔØÈÎÎñ--ÒÑ´æÔÚµÄÈÎÎñ
+//ä»æ–‡ä»¶ä¸­åŠ è½½ä¸‹è½½ä»»åŠ¡--å·²å­˜åœ¨çš„ä»»åŠ¡
 int CDownloadTaskManager::loadTaskFromFile(){
 	tinyxml2::XMLDocument xmlTaskInfo;
 	if (isTaskInfoFileExisted()) {
 		xmlTaskInfo.LoadFile(m_strTaskInfoFilePath.c_str());
 	}
 	XMLNode * pTaskInfoNode = xmlTaskInfo.RootElement();
-	//±éÀúXML½Úµã£¬¸ù¾İ½ÚµãµÄvalueºÍtext£¬À´³õÊ¼»¯TaskInfo
+	//éå†XMLèŠ‚ç‚¹ï¼Œæ ¹æ®èŠ‚ç‚¹çš„valueå’Œtextï¼Œæ¥åˆå§‹åŒ–TaskInfo
 
-	//Ê¹ÓÃmapÀ´Æ¥ÅäTaskInfo½ÚµãµÄ×Ó½Úµã
+	//ä½¿ç”¨mapæ¥åŒ¹é…TaskInfoèŠ‚ç‚¹çš„å­èŠ‚ç‚¹
 	map<string,int> mapDownTaskInfoValues;
 	mapDownTaskInfoValues["TasksCount"] = 1;
 	mapDownTaskInfoValues["ContentLength"] = 2;
 	mapDownTaskInfoValues["DownloadTime"] = 3;
 	mapDownTaskInfoValues["Task"] = 4;
 
-	//Ê¹ÓÃmapÀ´Æ¥ÅäTask½ÚµãµÄ×Ó½Úµã
+	//ä½¿ç”¨mapæ¥åŒ¹é…TaskèŠ‚ç‚¹çš„å­èŠ‚ç‚¹
 	map<string,int> mapTaskValues;
 	mapTaskValues["StartPos"] = 1;
 	mapTaskValues["EndPos"] = 2;
@@ -91,11 +91,11 @@ int CDownloadTaskManager::loadTaskFromFile(){
 	mapTaskValues["TaskStatus"] = 6;
 	mapTaskValues["TaskId"] = 7;
 
-	//Á½¸öÓÃÓÚÇ¿ÖÆÀàĞÍ×ª»»µÄÖ¸Õë
+	//ä¸¤ä¸ªç”¨äºå¼ºåˆ¶ç±»å‹è½¬æ¢çš„æŒ‡é’ˆ
 	XMLElement * pTaskInfoElementTemp;
 	XMLElement * pTaskElementTemp;
 
-	//¿ªÊ¼±éÀú
+	//å¼€å§‹éå†
 	for (XMLNode * pIterTaskInfoNode = pTaskInfoNode->FirstChild();pIterTaskInfoNode != NULL;pIterTaskInfoNode = pIterTaskInfoNode->NextSibling())
 	{
 		pTaskInfoElementTemp = (XMLElement * )pIterTaskInfoNode;
@@ -147,94 +147,94 @@ int CDownloadTaskManager::loadTaskFromFile(){
 	return 1;
 }
 
-//Ğ´ÈëÏÂÔØÈÎÎñÎÄ¼ş
+//å†™å…¥ä¸‹è½½ä»»åŠ¡æ–‡ä»¶
 int CDownloadTaskManager::writeToFile(){
 	tinyxml2::XMLDocument xmlTaskInfo;
-	//Á½¸öxml½ÚµãÖ¸Õë£¬pXMLNodeÖ¸ÏòDocÖĞÒÑ´æÔÚµÄ¸¸½Úµã£¬pXMLNodeNewÖ¸Ïònew³öÀ´µÄ½Úµã¡£
+	//ä¸¤ä¸ªxmlèŠ‚ç‚¹æŒ‡é’ˆï¼ŒpXMLNodeæŒ‡å‘Docä¸­å·²å­˜åœ¨çš„çˆ¶èŠ‚ç‚¹ï¼ŒpXMLNodeNewæŒ‡å‘newå‡ºæ¥çš„èŠ‚ç‚¹ã€‚
 	XMLNode * pXMLNode;
 	XMLNode * pXMLNodeNew;
 
 	XMLElement * pXMLElementNew;
 
-	//×ª»»XMLDocument
+	//è½¬æ¢XMLDocument
 
-	//ĞÂÔö¸ù½ÚµãTaskInfo
+	//æ–°å¢æ ¹èŠ‚ç‚¹TaskInfo
 	pXMLNode = &xmlTaskInfo;
 	pXMLNodeNew = xmlTaskInfo.NewElement("TaskInfo");
 	pXMLNode ->InsertFirstChild(pXMLNodeNew);
 
 	pXMLNode = pXMLNode->FirstChild();
 
-	//Ìí¼ÓTasksCount½Úµã
+	//æ·»åŠ TasksCountèŠ‚ç‚¹
 	pXMLNodeNew = xmlTaskInfo.NewElement("TasksCount");
 	pXMLElementNew = (XMLElement * )pXMLNodeNew;
 	pXMLElementNew->SetText(m_nTasksCount);
 	pXMLNode -> LinkEndChild(pXMLNodeNew);
 
-	//Ìí¼ÓContentLength½Úµã
+	//æ·»åŠ ContentLengthèŠ‚ç‚¹
 	pXMLNodeNew = xmlTaskInfo.NewElement("ContentLength");
 	pXMLElementNew = (XMLElement * )pXMLNodeNew;
 	pXMLElementNew->SetText((int64_t)m_llContentLength);
 	pXMLNode -> LinkEndChild(pXMLNodeNew);
 
-	//Ìí¼ÓDownloadTime½Úµã
+	//æ·»åŠ DownloadTimeèŠ‚ç‚¹
 	pXMLNodeNew = xmlTaskInfo.NewElement("DownloadTime");
 	pXMLElementNew = (XMLElement * )pXMLNodeNew;
 	pXMLElementNew->SetText((int64_t)m_llDownloadTime);
 	pXMLNode -> LinkEndChild(pXMLNodeNew);
 
-	//ÒÀ´ÎÌí¼ÓÃ¿Ò»¸öTask½Úµã
+	//ä¾æ¬¡æ·»åŠ æ¯ä¸€ä¸ªTaskèŠ‚ç‚¹
 	for (vector<CTask *>::const_iterator iterPTask = m_vecPTasks.begin();iterPTask != m_vecPTasks.end();iterPTask++)
 	{
 		pXMLNodeNew = xmlTaskInfo.NewElement("Task");
 		pXMLNode->LinkEndChild(pXMLNodeNew);
 		CDownloadTask * pDownloadTask = (CDownloadTask *)*iterPTask;
-		//¸¸½ÚµãÖ¸ÏòDivide½Úµã
+		//çˆ¶èŠ‚ç‚¹æŒ‡å‘DivideèŠ‚ç‚¹
 		pXMLNode = pXMLNodeNew;
 
-		//Ìí¼ÓStartPos½Úµã
+		//æ·»åŠ StartPosèŠ‚ç‚¹
 		pXMLNodeNew = xmlTaskInfo.NewElement("StartPos");
 		pXMLElementNew = (XMLElement * )pXMLNodeNew;
 		pXMLElementNew->SetText(pDownloadTask->m_llStartPos);
 		pXMLNode->LinkEndChild(pXMLNodeNew);
 
-		//Ìí¼ÓEndPos½Úµã
+		//æ·»åŠ EndPosèŠ‚ç‚¹
 		pXMLNodeNew = xmlTaskInfo.NewElement("EndPos");
 		pXMLElementNew = (XMLElement * )pXMLNodeNew;
 		pXMLElementNew->SetText(pDownloadTask->m_llEndPos);
 		pXMLNode->LinkEndChild(pXMLNodeNew);
 
-		//Ìí¼ÓDownloadedPos½Úµã
+		//æ·»åŠ DownloadedPosèŠ‚ç‚¹
 		pXMLNodeNew = xmlTaskInfo.NewElement("DownloadedPos");
 		pXMLElementNew = (XMLElement * )pXMLNodeNew;
 		pXMLElementNew->SetText(pDownloadTask->m_llDownloadedPos);
 		pXMLNode->LinkEndChild(pXMLNodeNew);
 
-		//Ìí¼ÓRemotePath½Úµã
+		//æ·»åŠ RemotePathèŠ‚ç‚¹
 		pXMLNodeNew = xmlTaskInfo.NewElement("RemotePath");
 		pXMLElementNew = (XMLElement * )pXMLNodeNew;
 		pXMLElementNew->SetText(pDownloadTask->m_strRemotePath.c_str());
 		pXMLNode->LinkEndChild(pXMLNodeNew);
 
-		//Ìí¼ÓLocalPath½Úµã
+		//æ·»åŠ LocalPathèŠ‚ç‚¹
 		pXMLNodeNew = xmlTaskInfo.NewElement("LocalPath");
 		pXMLElementNew = (XMLElement * )pXMLNodeNew;
 		pXMLElementNew->SetText(pDownloadTask->m_strLocalPath.c_str());
 		pXMLNode->LinkEndChild(pXMLNodeNew);
 
-		//Ìí¼ÓTaskStatus½Úµã
+		//æ·»åŠ TaskStatusèŠ‚ç‚¹
 		pXMLNodeNew = xmlTaskInfo.NewElement("TaskStatus");
 		pXMLElementNew = (XMLElement * )pXMLNodeNew;
 		pXMLElementNew->SetText(pDownloadTask->m_nTaskStatus);
 		pXMLNode->LinkEndChild(pXMLNodeNew);
 
-		//Ìí¼ÓTaskId½Úµã
+		//æ·»åŠ TaskIdèŠ‚ç‚¹
 		pXMLNodeNew = xmlTaskInfo.NewElement("TaskId");
 		pXMLElementNew = (XMLElement * )pXMLNodeNew;
 		pXMLElementNew->SetText(pDownloadTask->m_nTaskId);
 		pXMLNode->LinkEndChild(pXMLNodeNew);
 
-		//¸¸½ÚµãÖ¸Õë»ØÍË£¬Ö¸ÏòDownloadedInfo½Úµã
+		//çˆ¶èŠ‚ç‚¹æŒ‡é’ˆå›é€€ï¼ŒæŒ‡å‘DownloadedInfoèŠ‚ç‚¹
 		pXMLNode = pXMLNode->Parent();
 	}
 	//xmlTaskInfo.Print();
@@ -242,12 +242,12 @@ int CDownloadTaskManager::writeToFile(){
 	return 1;
 }
 
-//ÔØÈëÏÂÔØÈÎÎñ
+//è½½å…¥ä¸‹è½½ä»»åŠ¡
 errorcode CDownloadTaskManager::loadDownloadTask(){
-	//Èç¹ûÏÂÔØÈÎÎñÎÄ¼ş´æÔÚ£¬Ôò´ÓÎÄ¼ş¼ÓÔØ¡£Èç¹û²»´æÔÚ£¬ÖØĞÂ³õÊ¼»¯¡£
+	//å¦‚æœä¸‹è½½ä»»åŠ¡æ–‡ä»¶å­˜åœ¨ï¼Œåˆ™ä»æ–‡ä»¶åŠ è½½ã€‚å¦‚æœä¸å­˜åœ¨ï¼Œé‡æ–°åˆå§‹åŒ–ã€‚
 	if (isTaskInfoFileExisted())
 	{
-		//ÏÂÔØĞÅÏ¢ÎÄ¼ş´æÔÚ
+		//ä¸‹è½½ä¿¡æ¯æ–‡ä»¶å­˜åœ¨
 		loadTaskFromFile();
 		if (checkTaskInfo() == noerror)
 		{
@@ -260,13 +260,13 @@ errorcode CDownloadTaskManager::loadDownloadTask(){
 			return generateDownloadTask();
 		}
 	}
-	//²»´æÔÚ£¬ÖØĞÂ³õÊ¼»¯Ò»¸ö¡£
+	//ä¸å­˜åœ¨ï¼Œé‡æ–°åˆå§‹åŒ–ä¸€ä¸ªã€‚
 	else{
 		return generateDownloadTask();
 	}
 }
 
-//ÏÂÔØÈÎÎñĞÅÏ¢ÎÄ¼şÊÇ·ñ´æÔÚ
+//ä¸‹è½½ä»»åŠ¡ä¿¡æ¯æ–‡ä»¶æ˜¯å¦å­˜åœ¨
 int CDownloadTaskManager::isTaskInfoFileExisted() {
 	fstream fsDownloadedInfoFile;
 	fsDownloadedInfoFile.open(m_strTaskInfoFilePath.c_str(),ios::in);
@@ -279,11 +279,11 @@ int CDownloadTaskManager::isTaskInfoFileExisted() {
 	}
 }
 
-//»ñÈ¡ÏÂÔØÎÄ¼şµÄ´óĞ¡
+//è·å–ä¸‹è½½æ–‡ä»¶çš„å¤§å°
 long long CDownloadTaskManager::getContentLength(){
 	char ResponseData[2000];
 
-	//ÎÄ¼ş´óĞ¡
+	//æ–‡ä»¶å¤§å°
 	long long llContentLength = 0;
 	string strHttpHeader;
 
@@ -291,7 +291,7 @@ long long CDownloadTaskManager::getContentLength(){
 	while (true){ 
 		pCurlForContentLength->httpGetHeader(m_strRemotePath.c_str(), ResponseData); 
 		strHttpHeader = ResponseData;
-		//httpÍ·ÓĞLocation×Ö¶Î£¬ËµÃ÷ÓĞÖØ¶¨Ïò¡£
+		//httpå¤´æœ‰Locationå­—æ®µï¼Œè¯´æ˜æœ‰é‡å®šå‘ã€‚
 		if (strHttpHeader.find("Location:") != string::npos)
 		{
 			string strRedirect = strHttpHeader.substr(strHttpHeader.find("Location:"));
@@ -307,10 +307,10 @@ long long CDownloadTaskManager::getContentLength(){
     strHttpHeader = ResponseData;
 	stringstream strstrContentLength;
 
-	//·µ»ØµÄ½á¹ûÃ»ÓĞContent-RangeĞĞ£¬¿ÉÄÜÊÇÃ»ÓĞ»ñµÃÊı¾İ£¬Ò²¿ÉÄÜÊÇÃ»ÓĞ»ñµÃContent-RangeĞĞ
+	//è¿”å›çš„ç»“æœæ²¡æœ‰Content-Rangeè¡Œï¼Œå¯èƒ½æ˜¯æ²¡æœ‰è·å¾—æ•°æ®ï¼Œä¹Ÿå¯èƒ½æ˜¯æ²¡æœ‰è·å¾—Content-Rangeè¡Œ
 	if (strHttpHeader.find("Content-Range:") == string::npos && strHttpHeader.find("Content-Length:") == string::npos  )
 	{
-		//´íÎó´¦Àí
+		//é”™è¯¯å¤„ç†
 		return 0;
 	}
 	else if (strHttpHeader.find("Content-Range:") != string::npos)
@@ -326,7 +326,7 @@ long long CDownloadTaskManager::getContentLength(){
 	}
 
 
-	//»ñÈ¡ÎÄ¼ş´óĞ¡ÊıÖµ
+	//è·å–æ–‡ä»¶å¤§å°æ•°å€¼
 	strstrContentLength>>llContentLength;
 	//m_llContentLength = llContentLength;
 
@@ -334,7 +334,7 @@ long long CDownloadTaskManager::getContentLength(){
 	return llContentLength;
 }
 
-//×ª»»×Ö½ÚÊıµ½´øµ¥Î»µÄ×Ö·û´®
+//è½¬æ¢å­—èŠ‚æ•°åˆ°å¸¦å•ä½çš„å­—ç¬¦ä¸²
 string CDownloadTaskManager::convertLLContentLengthToString(long long llContentLength){
 	long long llTemp;
 	string strContentLength;
@@ -371,7 +371,7 @@ string CDownloadTaskManager::convertLLContentLengthToString(long long llContentL
 	return strContentLength;
 }
 
-//´øµ¥Î»×Ö·û´®×ª»»³É´óÔ¼Öµ×Ö·û´®
+//å¸¦å•ä½å­—ç¬¦ä¸²è½¬æ¢æˆå¤§çº¦å€¼å­—ç¬¦ä¸²
 string CDownloadTaskManager::convertToAboutContentLength(string strContentLength){
 	stringstream strstrAboutContentLength;
 	string strAboutContentLength;
@@ -380,7 +380,7 @@ string CDownloadTaskManager::convertToAboutContentLength(string strContentLength
 	double dDecimal;
 	int temp;
 
-	//×ª»»³ÉÖ»ÓĞÒ»¸öµ¥Î»µÄ´óÔ¼Öµ
+	//è½¬æ¢æˆåªæœ‰ä¸€ä¸ªå•ä½çš„å¤§çº¦å€¼
 	if (strContentLength.find('G')!= string::npos)
 	{
 		nInteger = atoi(strContentLength.substr(0,strContentLength.find('G')).c_str());
@@ -432,7 +432,7 @@ string CDownloadTaskManager::convertToAboutContentLength(string strContentLength
 }
 
 
-//´øµ¥Î»×Ö·û´®×ª»»³É´óÔ¼Öµ×Ö·û´®
+//å¸¦å•ä½å­—ç¬¦ä¸²è½¬æ¢æˆå¤§çº¦å€¼å­—ç¬¦ä¸²
 string CDownloadTaskManager::convertToAboutContentLength(long long llContentLength){
 	if (llContentLength == 0)
 	{
@@ -448,7 +448,7 @@ string CDownloadTaskManager::convertToAboutContentLength(long long llContentLeng
 	double dDecimal = 0;
 	int temp = 0;
 
-	//×ª»»³ÉÖ»ÓĞÒ»¸öµ¥Î»µÄ´óÔ¼Öµ
+	//è½¬æ¢æˆåªæœ‰ä¸€ä¸ªå•ä½çš„å¤§çº¦å€¼
 	if (strContentLength.find('G')!= string::npos)
 	{
 		nInteger = atoi(strContentLength.substr(0,strContentLength.find('G')).c_str());
@@ -499,41 +499,41 @@ string CDownloadTaskManager::convertToAboutContentLength(long long llContentLeng
 	return strAboutContentLength;
 }
 
-//Ğ£ÑéÏÂÔØÈÎÎñĞÅÏ¢
+//æ ¡éªŒä¸‹è½½ä»»åŠ¡ä¿¡æ¯
 errorcode CDownloadTaskManager::checkTaskInfo(){
-	//Ğ£ÑéContentLengthÊÇ·ñÓëÔ¶³ÌÎÄ¼şÒ»ÖÂ
+	//æ ¡éªŒContentLengthæ˜¯å¦ä¸è¿œç¨‹æ–‡ä»¶ä¸€è‡´
 	if (m_llContentLength != getContentLength())
 	{
-		//ÏÂÔØĞÅÏ¢ContentLengthÓëÔ¶³ÌÎÄ¼ş²»Ò»ÖÂ
+		//ä¸‹è½½ä¿¡æ¯ContentLengthä¸è¿œç¨‹æ–‡ä»¶ä¸ä¸€è‡´
 		return inconsisdent;
 	}
-	//Ğ£ÑéÈÎÎñÊÇ·ñºÏ·¨--Ã¿¸ö»®·ÖÊ×Î²ÏàÁ¬£¬×îºóÒ»¸ö»®·ÖµÄ½áÊøÎ»ÖÃµÈÓÚcontentlength
+	//æ ¡éªŒä»»åŠ¡æ˜¯å¦åˆæ³•--æ¯ä¸ªåˆ’åˆ†é¦–å°¾ç›¸è¿ï¼Œæœ€åä¸€ä¸ªåˆ’åˆ†çš„ç»“æŸä½ç½®ç­‰äºcontentlength
 	long long llTemp = 0;
 	for (vector<CTask *>::const_iterator iterPTasks = m_vecPTasks.begin();iterPTasks != m_vecPTasks.end();iterPTasks++)
 	{
 		CDownloadTask *p = (CDownloadTask *)*iterPTasks;
 		if (p->m_llStartPos != ((p->m_nTaskId - 1) * MEGABYTES))
 		{
-			//»®·Ö¿ªÊ¼Î»ÖÃ´íÎó
+			//åˆ’åˆ†å¼€å§‹ä½ç½®é”™è¯¯
 			return dividerror;
 		}
 		if (llTemp != p->m_llStartPos)
 		{
-			//»®·Ö½áÊøÎ»ÖÃ´íÎó
+			//åˆ’åˆ†ç»“æŸä½ç½®é”™è¯¯
 			return dividerror;
 		}
 		llTemp = p->m_llEndPos + 1;
 	}
 	if (llTemp != (m_llContentLength+1))
 	{
-		//×îºóÒ»¸ö»®·ÖµÄ½áÊøÎ»ÖÃ´íÎó
+		//æœ€åä¸€ä¸ªåˆ’åˆ†çš„ç»“æŸä½ç½®é”™è¯¯
 		return dividerror;
 	}
-	//Ğ£ÑéÒÑÏÂÔØÎÄ¼şĞÅÏ¢ÊÇ·ñÒ»ÖÂ
+	//æ ¡éªŒå·²ä¸‹è½½æ–‡ä»¶ä¿¡æ¯æ˜¯å¦ä¸€è‡´
 	return noerror;
 }
 
-//ÈÎÎñÊÇ·ñÍê³É
+//ä»»åŠ¡æ˜¯å¦å®Œæˆ
 int CDownloadTaskManager::isTasksFinished(){
 	CDownloadTask * p;
 	for (vector<CTask *>::const_iterator iterPDownloadTask = m_vecPTasks.begin();iterPDownloadTask != m_vecPTasks.end();iterPDownloadTask++)
@@ -547,7 +547,7 @@ int CDownloadTaskManager::isTasksFinished(){
 	return 1;
 }
 
-//»ñÈ¡ÒÑÏÂÔØ×ÜÊı
+//è·å–å·²ä¸‹è½½æ€»æ•°
 long long CDownloadTaskManager::getTotalDownloadedLength(){
 	long long llTotalDownloadedLength = 0;
 	CDownloadTask * p;
@@ -562,10 +562,10 @@ long long CDownloadTaskManager::getTotalDownloadedLength(){
 
 
 int  CDownloadTaskManager::clearDownloadTask(){
-	//»ùÀà³ÉÔ±
+	//åŸºç±»æˆå‘˜
 	clearTask();
 
-	//×ÓÀà³ÉÔ±
+	//å­ç±»æˆå‘˜
 	m_llDownloadTime = 0;
 	m_llContentLength = 0;
 

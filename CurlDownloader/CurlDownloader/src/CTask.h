@@ -1,15 +1,15 @@
 #pragma once
 
-//ÈÎÎñ×´Ì¬ºê
-#define TASK_TODO  0     //´ı´¦Àí
-#define TASK_COMPLETE 1  //ÒÑÍê³É
-#define TASK_DONE 2      //Ê§°Ü
-#define TASK_DOING 3     //ÕıÔÚ´¦Àí
+//ä»»åŠ¡çŠ¶æ€å®
+#define TASK_TODO  0     //å¾…å¤„ç†
+#define TASK_COMPLETE 1  //å·²å®Œæˆ
+#define TASK_DONE 2      //å¤±è´¥
+#define TASK_DOING 3     //æ­£åœ¨å¤„ç†
 
 class CTask {
 public:
-	//ÈÎÎñ×´Ì¬
+	//ä»»åŠ¡çŠ¶æ€
 	int m_nTaskStatus;
-	//ÈÎÎñ±àºÅ
+	//ä»»åŠ¡ç¼–å·
 	int m_nTaskId;
 };

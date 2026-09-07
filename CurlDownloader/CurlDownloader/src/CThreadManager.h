@@ -6,27 +6,27 @@
 
 class CThreadManager {
 public:
-	//Ïß³Ì×ÜÊı
+	//çº¿ç¨‹æ€»æ•°
 	int m_nThreadsCount;
-	//Ïß³ÌÊı×é
+	//çº¿ç¨‹æ•°ç»„
 	vector<CThread *> m_vecThreads;
-	//¿ÕÏĞÏß³ÌÊı×é
+	//ç©ºé—²çº¿ç¨‹æ•°ç»„
 	vector<CThread *> m_vecFreeThreads;
-	//·±Ã¦Ïß³ÌÊı×é
+	//ç¹å¿™çº¿ç¨‹æ•°ç»„
 	vector<CThread *> m_vecBusyThreads;
-	//»¥³âÁ¿
+	//äº’æ–¥é‡
 	HANDLE m_hDownloadThreadMutex;
-	//ÔİÍ£ÊÂ¼ş
+	//æš‚åœäº‹ä»¶
 	HANDLE m_hPauseEvent;
 
 	CThreadManager(){
-		//´´½¨»¥³âÁ¿
+		//åˆ›å»ºäº’æ–¥é‡
 		m_hDownloadThreadMutex = CreateMutexW(NULL,false,_T("mutex_for_downloadthread"));
 		m_hPauseEvent = CreateEvent(NULL, 0, 1, NULL);
 		m_nThreadsCount = 0;
 	}
 
-	//ÓÃÓÚÍ£Ö¹ÏÂÔØÊ±£¬½áÊøËùÓĞÏß³Ì¡£
+	//ç”¨äºåœæ­¢ä¸‹è½½æ—¶ï¼Œç»“æŸæ‰€æœ‰çº¿ç¨‹ã€‚
 	int stopThreads(){
 		for(vector<CThread *>::const_iterator iterPThread = m_vecFreeThreads.begin();iterPThread != m_vecFreeThreads.end();iterPThread++){
 			CThread * p = *iterPThread;

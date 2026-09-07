@@ -7,19 +7,19 @@ using namespace std;
 
 class CTaskManager {
 public:
-	//TaskÊı×é
+	//Taskæ•°ç»„
 	vector<CTask *> m_vecPTasks;
-	//TaskÊıÄ¿
+	//Taskæ•°ç›®
 	int m_nTasksCount;
 
-	//ÒÑÍê³ÉTaskÊı×é
+	//å·²å®ŒæˆTaskæ•°ç»„
 	vector<CTask *> m_vecPCompleteTasks;
-	//ÒÑÍê³ÉTaskÊıÄ¿
+	//å·²å®ŒæˆTaskæ•°ç›®
 	int m_nCompleteTasksCount;
 
-	//Î´Íê³ÉTaskÊı×é
+	//æœªå®ŒæˆTaskæ•°ç»„
 	vector<CTask *> m_vecPTodoTasks;
-	//Î´Íê³ÉTaskÊıÄ¿
+	//æœªå®ŒæˆTaskæ•°ç›®
 	int m_nTodoTasksCount;
 
 	CTaskManager(){
@@ -30,7 +30,7 @@ public:
 	}
 	
 
-	//Ìí¼ÓÒ»¸öÈÎÎñ
+	//æ·»åŠ ä¸€ä¸ªä»»åŠ¡
 	int pushOneTask(CTask * pTask){
 		if (pTask != NULL)
 		{
@@ -48,7 +48,7 @@ public:
 			return 0;
 		}
 	}
-	//È¡³öÒ»¸ö´ı´¦ÀíÈÎÎñ
+	//å–å‡ºä¸€ä¸ªå¾…å¤„ç†ä»»åŠ¡
 	virtual CTask * popOneTaskTodo(){
 		CTask* pTask;
 		if (m_vecPTodoTasks.size() == 0)
@@ -65,7 +65,7 @@ public:
 		}
 	}
 
-	//Ìí¼ÓÒ»¸ö´ı´¦ÀíÈÎÎñ
+	//æ·»åŠ ä¸€ä¸ªå¾…å¤„ç†ä»»åŠ¡
 	virtual int pushOneTodoTask(CTask * pTask){
 		if (pTask != NULL)
 		{
@@ -77,7 +77,7 @@ public:
 		}
 	}
 
-	//Ìí¼ÓÒ»¸öÒÑÍê³ÉÈÎÎñ
+	//æ·»åŠ ä¸€ä¸ªå·²å®Œæˆä»»åŠ¡
 	virtual int pushOneCompleteTask(CTask * pTask){
 		if (pTask != NULL)
 		{
@@ -131,7 +131,7 @@ public:
 			return 0;
 		}
 	}
-	//»ØÊÕÈÎÎñ
+	//å›æ”¶ä»»åŠ¡
 	int collectTasks(){
 		CTask * p;
 		for (vector<CTask *>::const_iterator iterPTask = m_vecPCompleteTasks.begin();iterPTask != m_vecPCompleteTasks.end();)

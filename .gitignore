@@ -5,6 +5,20 @@ CurlDownloader\Release\*
 CurlDownloader\CurlDownloader\Debug\*
 CurlDownloader\CurlDownloader\Release\*
 
+# CMake build directories
+build/
+build-*/
+out/
+cmake-build-*/
+CMakeFiles/
+CMakeCache.txt
+cmake_install.cmake
+CTestTestfile.cmake
+Makefile
+
+# CMake compilation database
+compile_commands.json
+
 # Windows image file caches
 Thumbs.db
 ehthumbs.db

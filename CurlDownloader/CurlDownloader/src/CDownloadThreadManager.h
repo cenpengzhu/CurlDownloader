@@ -5,9 +5,9 @@
 
 class CDownloadThreadManager : public CThreadManager {
 public:
-	//本地文件指针
+	//鏈湴鏂囦欢鎸囬拡
 	FILE * m_pLocalFile;
-	//本地文件地址
+	//鏈湴鏂囦欢鍦板潃
 	string m_strLocalFilePath;
 
 	CDownloadThreadManager(const char * strLocalFilePath){

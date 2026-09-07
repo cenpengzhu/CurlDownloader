@@ -12,65 +12,65 @@
 using namespace std;
 
 enum errorcode {
-	//ц╩сп╢МнС
+	//Ф╡║Ф°┴И■≥Х╞╞
 	noerror = 1,
-	//сКт╤Ёлнд╪Ч╡╩р╩жб
+	//Д╦▌Х©°Г╗▀Ф√┤Д╩╤Д╦█Д╦─Х┤╢
 	inconsisdent = 2,
-	//обть╩╝╥жпео╒╢МнС
+	//Д╦▀Х╫╫Е┬▓Е┬├Д©║Ф│╞И■≥Х╞╞
 	dividerror = 3,
-	//ряобтьнд╪Ч╢МнС
+	//Е╥╡Д╦▀Х╫╫Ф√┤Д╩╤И■≥Х╞╞
 	downloadederror = 4,
-	//нд╪Ч╡ывВ╢МнС
+	//Ф√┤Д╩╤Ф⌠█Д╫°И■≥Х╞╞
 	filerror = 5,
-	//т╤Ёлнд╪Ч╢МнС
+	//Х©°Г╗▀Ф√┤Д╩╤И■≥Х╞╞
 	remotefilerror = 6,
-	//╠╬╣ьобтьб╥╬╤╢МнС
+	//Ф°╛Е°╟Д╦▀Х╫╫Х╥╞Е╬└И■≥Х╞╞
 	localfilerror = 7,
 };
 
 class CDownloadTaskManager : public CTaskManager {
 public:
-	//обтьхннЯпео╒нд╪Ч╣ьж╥
+	//Д╦▀Х╫╫Д╩╩Е┼║Д©║Ф│╞Ф√┤Д╩╤Е°╟Е²─
 	string m_strTaskInfoFilePath;
-	//обтьт╤Ёл╣ьж╥url
+	//Д╦▀Х╫╫Х©°Г╗▀Е°╟Е²─url
 	string m_strRemotePath;
-	//обть╠╬╣ь╣ьж╥
+	//Д╦▀Х╫╫Ф°╛Е°╟Е°╟Е²─
 	string m_strLocalPath;
-	//обтьнд╪Ч╢Сп║ё╛вж╫зйЩ
+	//Д╦▀Х╫╫Ф√┤Д╩╤Е╓╖Е╟▐О╪▄Е╜≈Х┼┌Ф∙╟
 	long long m_llContentLength;
-	//обтьй╠╪Д
+	//Д╦▀Х╫╫Ф≈╤И≈╢
 	long long m_llDownloadTime;
 
 	CDownloadTaskManager(const char * strRemotePath,const char * strLocalPath,const char * strTaskInfoFilePath);
-	//иЗЁиобтьхннЯ--пб╫╗╣добтьхннЯ
+	//Г■÷Ф┬░Д╦▀Х╫╫Д╩╩Е┼║--Ф√╟Е╩╨Г └Д╦▀Х╫╫Д╩╩Е┼║
 	errorcode generateDownloadTask();	
-	//╢снд╪Чжп╪стьобтьхннЯ--ря╢Фтз╣дхннЯ
+	//Д╩▌Ф√┤Д╩╤Д╦╜Е┼═Х╫╫Д╦▀Х╫╫Д╩╩Е┼║--Е╥╡Е╜≤Е°╗Г └Д╩╩Е┼║
 	int loadTaskFromFile();
-	//п╢хКобтьхннЯнд╪Ч
+	//Е├≥Е┘╔Д╦▀Х╫╫Д╩╩Е┼║Ф√┤Д╩╤
 	int writeToFile();
-	//тьхКобтьхннЯ
+	//Х╫╫Е┘╔Д╦▀Х╫╫Д╩╩Е┼║
 	errorcode loadDownloadTask();	
-	//обтьхннЯпео╒нд╪Чйг╥Я╢Фтз
+	//Д╦▀Х╫╫Д╩╩Е┼║Д©║Ф│╞Ф√┤Д╩╤Ф≤╞Е░╕Е╜≤Е°╗
 	int isTaskInfoFileExisted(); 
-	//╩Ях║обтьнд╪Ч╣д╢Сп║
+	//Х▌╥Е▐√Д╦▀Х╫╫Ф√┤Д╩╤Г └Е╓╖Е╟▐
 	long long getContentLength();
-	//в╙╩╩вж╫зйЩ╣╫╢Ь╣╔н╩╣двж╥Ш╢╝
+	//Х╫╛Ф█╒Е╜≈Х┼┌Ф∙╟Е┬╟Е╦╕Е█∙Д╫█Г └Е╜≈Г╛╕Д╦╡
 	string convertLLContentLengthToString(long long llContentLength);
-	//╢Ь╣╔н╩вж╥Ш╢╝в╙╩╩Ёи╢Ст╪ж╣вж╥Ш╢╝
+	//Е╦╕Е█∙Д╫█Е╜≈Г╛╕Д╦╡Х╫╛Ф█╒Ф┬░Е╓╖Г╨╕Е─╪Е╜≈Г╛╕Д╦╡
 	string convertToAboutContentLength(string strContentLength);
-	//вж╫зйЩв╙╩╩Ёи╢Ст╪ж╣вж╥Ш╢╝
+	//Е╜≈Х┼┌Ф∙╟Х╫╛Ф█╒Ф┬░Е╓╖Г╨╕Е─╪Е╜≈Г╛╕Д╦╡
 	string convertToAboutContentLength(long long llContentLength);
-	//пёяИобтьхннЯпео╒
+	//Ф═║И╙▄Д╦▀Х╫╫Д╩╩Е┼║Д©║Ф│╞
 	errorcode checkTaskInfo();
-	//хннЯйг╥ЯмЙЁи
+	//Д╩╩Е┼║Ф≤╞Е░╕Е╝▄Ф┬░
 	int isTasksFinished();
-	//╩Ях║ряобтьвэйЩ
+	//Х▌╥Е▐√Е╥╡Д╦▀Х╫╫Ф─╩Ф∙╟
 	long long getTotalDownloadedLength();
-	//╩Ях║обтьпео╒--обть╫Ь╤хё╛обтькы╤хё╛йёсЮобтьй╠╪Д╣х║ё
+	//Х▌╥Е▐√Д╦▀Х╫╫Д©║Ф│╞--Д╦▀Х╫╫Х©⌡Е╨╕О╪▄Д╦▀Х╫╫И─÷Е╨╕О╪▄Е┴╘Д╫≥Д╦▀Х╫╫Ф≈╤И≈╢Г╜┴Ц─┌
 	int getDownloadInfo();
-	//гЕЁЩобтьхннЯ
+	//Ф╦┘И≥╓Д╦▀Х╫╫Д╩╩Е┼║
 	int clearDownloadTask();
-	//к╒пбобтьй╠╪Д
+	//Е┬╥Ф√╟Д╦▀Х╫╫Ф≈╤И≈╢
 	long long freshDownloadTime(int nTime);
 
 };
