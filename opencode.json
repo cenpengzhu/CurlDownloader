@@ -23,14 +23,48 @@
   // 本仓库是纯 C++/MSBuild 项目，关掉与之无关的自动格式化
   "formatter": false,
 
+  // 规则按插入顺序求值，最后一条命中的生效：
+  // 所以先写宽泛的 "*"，再逐条放宽/收紧具体命令。
   "permission": {
     "lsp": "allow",
     "bash": {
       "*": "ask",
-      "git status": "allow",
+
+      // Git 只读查询
+      "git status*": "allow",
       "git diff*": "allow",
       "git log*": "allow",
-      "msbuild*": "ask"
+      "git show*": "allow",
+      "git branch": "allow",
+      "git remote*": "allow",
+      "git rev-parse*": "allow",
+      "git ls-files*": "allow",
+      "git cat-file*": "allow",
+      "git blame*": "allow",
+
+      // Git 本地写入（不含推送）
+      "git add*": "allow",
+      "git restore*": "allow",
+      "git commit -F*": "allow",
+      "git -c user.name=*": "allow",
+
+      // 构建：CMake 与 vcvarsall 包裹的构建 shell
+      "cmake*": "allow",
+      "*cmake.exe*": "allow",
+      "cmd /c *vcvarsall.bat*": "allow",
+      "msbuild*": "ask",
+
+      // 只读文件系统查询
+      "Test-Path*": "allow",
+      "Get-ChildItem*": "allow",
+      "Get-Location": "allow",
+
+      // 危险操作：保持逐次确认
+      "git push*": "ask",
+      "git commit --amend*": "ask",
+      "git reset --hard*": "ask",
+      "git clean -*f*": "ask",
+      "git config --global*": "ask"
     }
   }
 }
