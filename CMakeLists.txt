@@ -44,6 +44,16 @@ set(CMAKE_RUNTIME_OUTPUT_DIRECTORY "${CMAKE_BINARY_DIR}/bin")
 
 add_subdirectory(CurlDownloader/CurlDownloader)
 
+# ---------------------------------------------------------------------------
+# Tests (GoogleTest)
+# ---------------------------------------------------------------------------
+option(CURLDOWNLOADER_BUILD_TESTS "Build the GoogleTest unit tests" ON)
+
+if(CURLDOWNLOADER_BUILD_TESTS)
+    enable_testing()
+    add_subdirectory(tests)
+endif()
+
 # Mirror the generated database next to the sources so that tooling launched
 # from the project root picks it up without extra configuration.
 if(CURLDOWNLOADER_EXPORT_COMPILE_COMMANDS AND CMAKE_GENERATOR MATCHES "Ninja|Makefiles")
