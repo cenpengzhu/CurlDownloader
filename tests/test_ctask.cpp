@@ -6,14 +6,14 @@
 
 namespace {
 
-TEST(CTaskTest, StatusMacrosAreDistinct) {
+TEST(任务测试, 状态宏取值互不相同) {
     EXPECT_EQ(0, TASK_TODO);
     EXPECT_EQ(1, TASK_COMPLETE);
     EXPECT_EQ(2, TASK_DONE);
     EXPECT_EQ(3, TASK_DOING);
 }
 
-TEST(CTaskTest, FieldsAreAssignable) {
+TEST(任务测试, 字段可赋值) {
     CTask task;
     task.m_nTaskId = 42;
     task.m_nTaskStatus = TASK_DOING;
@@ -22,7 +22,7 @@ TEST(CTaskTest, FieldsAreAssignable) {
     EXPECT_EQ(TASK_DOING, task.m_nTaskStatus);
 }
 
-TEST(CDownloadTaskTest, InheritsCTaskFields) {
+TEST(下载任务测试, 继承任务基类字段) {
     CDownloadTask task;
     task.m_nTaskId = 7;
     task.m_nTaskStatus = TASK_TODO;
@@ -42,7 +42,7 @@ TEST(CDownloadTaskTest, InheritsCTaskFields) {
     EXPECT_EQ("http://example.com/file.bin", task.m_strRemotePath);
 }
 
-TEST(CDownloadTaskTest, SliceSpansOneMegabyte) {
+TEST(下载任务测试, 分片跨度为一兆字节) {
     CDownloadTask task;
     task.m_llStartPos = 0;
     task.m_llEndPos = 1048575;

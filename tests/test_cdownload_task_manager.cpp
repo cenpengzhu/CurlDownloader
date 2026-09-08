@@ -10,10 +10,10 @@
 
 namespace {
 
-// Builds a unique scratch path under %TEMP% and removes it on destruction.
-class TempFile {
+// 在 %TEMP% 下生成一个唯一的临时文件路径，并在析构时删除该文件。
+class 临时文件 {
 public:
-    explicit TempFile(const std::string& suffix) {
+    explicit 临时文件(const std::string& suffix) {
         char dir[MAX_PATH] = {0};
         GetTempPathA(MAX_PATH, dir);
 
@@ -24,7 +24,7 @@ public:
         m_path = oss.str();
     }
 
-    ~TempFile() { remove(m_path.c_str()); }
+    ~临时文件() { remove(m_path.c_str()); }
 
     const char* c_str() const { return m_path.c_str(); }
     const std::string& str() const { return m_path; }
@@ -38,11 +38,10 @@ private:
     std::string m_path;
 };
 
-// A manager wired to temp paths, with tasks injected directly so that no
-// network access is required.
-class CDownloadTaskManagerTest : public ::testing::Test {
+// 一个接到临时路径上的管理器，任务直接注入，因此无需任何网络访问。
+class 下载任务管理器测试 : public ::testing::Test {
 protected:
-    CDownloadTaskManagerTest()
+    下载任务管理器测试()
         : m_xml(".xml"),
           m_local(".bin"),
           m_manager("http://example.invalid/file.bin", m_local.c_str(),
@@ -50,8 +49,8 @@ protected:
 
     void TearDown() override { m_manager.clearDownloadTask(); }
 
-    // Appends a 1 MB-aligned slice with the given 1-based id.
-    CDownloadTask* addSlice(int id, long long start, long long end,
+    // 追加一个按 1 MB 对齐的分片，id 为从 1 开始的编号。
+    CDownloadTask* 添加分片(int id, long long start, long long end,
                             long long downloaded, int status) {
         auto* task = new CDownloadTask;
         task->m_nTaskId = id;
@@ -65,9 +64,9 @@ protected:
         return task;
     }
 
-    // Lays out `count` contiguous 1 MB slices totalling `contentLength` bytes,
-    // matching what generateDownloadTask() would produce.
-    void layOutSlices(int count, long long contentLength, int status) {
+    // 排布 count 个连续的 1 MB 分片，总长度为 contentLength 字节，与
+    // generateDownloadTask() 产生的布局一致。
+    void 排布分片(int count, long long contentLength, int status) {
         m_manager.m_nTasksCount = count;
         m_manager.m_llContentLength = contentLength;
         for (int i = 1; i <= count; ++i) {
@@ -75,20 +74,20 @@ protected:
             long long end = (i == count) ? contentLength
                                          : static_cast<long long>(MEGABYTES) * i - 1;
             long long downloaded = (status == TASK_COMPLETE) ? end : start;
-            addSlice(i, start, end, downloaded, status);
+            添加分片(i, start, end, downloaded, status);
         }
     }
 
-    TempFile m_xml;
-    TempFile m_local;
+    临时文件 m_xml;
+    临时文件 m_local;
     CDownloadTaskManager m_manager;
 };
 
 // ---------------------------------------------------------------------------
-// Construction
+// 构造
 // ---------------------------------------------------------------------------
 
-TEST_F(CDownloadTaskManagerTest, ConstructorStoresPathsAndZeroesCounters) {
+TEST_F(下载任务管理器测试, 构造时保存路径并将计数器清零) {
     EXPECT_EQ("http://example.invalid/file.bin", m_manager.m_strRemotePath);
     EXPECT_EQ(m_local.str(), m_manager.m_strLocalPath);
     EXPECT_EQ(m_xml.str(), m_manager.m_strTaskInfoFilePath);
@@ -101,33 +100,33 @@ TEST_F(CDownloadTaskManagerTest, ConstructorStoresPathsAndZeroesCounters) {
 // convertLLContentLengthToString
 // ---------------------------------------------------------------------------
 
-TEST_F(CDownloadTaskManagerTest, ConvertLengthZeroYieldsEmptyString) {
+TEST_F(下载任务管理器测试, 转换长度为零得到空字符串) {
     EXPECT_EQ("", m_manager.convertLLContentLengthToString(0));
 }
 
-TEST_F(CDownloadTaskManagerTest, ConvertLengthBytesOnly) {
+TEST_F(下载任务管理器测试, 转换长度仅字节) {
     EXPECT_EQ("512B", m_manager.convertLLContentLengthToString(512));
 }
 
-TEST_F(CDownloadTaskManagerTest, ConvertLengthKilobytes) {
-    // 2048 = 2K exactly, remainder 0 so no trailing B component
+TEST_F(下载任务管理器测试, 转换长度整千字节) {
+    // 2048 恰好为 2K，余数为 0，因此不带末尾的 B 部分
     EXPECT_EQ("2K", m_manager.convertLLContentLengthToString(2048));
 }
 
-TEST_F(CDownloadTaskManagerTest, ConvertLengthKilobytesWithRemainder) {
+TEST_F(下载任务管理器测试, 转换长度千字节带余数) {
     EXPECT_EQ("2K512B", m_manager.convertLLContentLengthToString(2048 + 512));
 }
 
-TEST_F(CDownloadTaskManagerTest, ConvertLengthMegabytes) {
+TEST_F(下载任务管理器测试, 转换长度兆字节) {
     EXPECT_EQ("5M", m_manager.convertLLContentLengthToString(5LL * MEGABYTES));
 }
 
-TEST_F(CDownloadTaskManagerTest, ConvertLengthMegabytesWithKilobytes) {
+TEST_F(下载任务管理器测试, 转换长度兆字节带千字节) {
     long long value = 5LL * MEGABYTES + 3LL * KILOBYTES;
     EXPECT_EQ("5M3K", m_manager.convertLLContentLengthToString(value));
 }
 
-TEST_F(CDownloadTaskManagerTest, ConvertLengthGigabytes) {
+TEST_F(下载任务管理器测试, 转换长度吉字节) {
     long long value = 2LL * GIGABYTES + 100LL * MEGABYTES;
     EXPECT_EQ("2G100M", m_manager.convertLLContentLengthToString(value));
 }
@@ -136,31 +135,31 @@ TEST_F(CDownloadTaskManagerTest, ConvertLengthGigabytes) {
 // convertToAboutContentLength
 // ---------------------------------------------------------------------------
 
-TEST_F(CDownloadTaskManagerTest, ConvertAboutZeroIsZeroBytes) {
+TEST_F(下载任务管理器测试, 近似转换零为零字节) {
     EXPECT_EQ("0.00B", m_manager.convertToAboutContentLength(0LL));
 }
 
-TEST_F(CDownloadTaskManagerTest, ConvertAboutBytes) {
+TEST_F(下载任务管理器测试, 近似转换字节) {
     EXPECT_EQ("512B", m_manager.convertToAboutContentLength(512LL));
 }
 
-TEST_F(CDownloadTaskManagerTest, ConvertAboutRoundsMegabytes) {
+TEST_F(下载任务管理器测试, 近似转换兆字节取整) {
     // 5 MB + 512 KB => "5M512K" => 5 + 512/1024 = 5.5M
     long long value = 5LL * MEGABYTES + 512LL * KILOBYTES;
     EXPECT_EQ("5.5M", m_manager.convertToAboutContentLength(value));
 }
 
-TEST_F(CDownloadTaskManagerTest, ConvertAboutRoundsGigabytes) {
+TEST_F(下载任务管理器测试, 近似转换吉字节取整) {
     // 2 GB + 512 MB => 2.5G
     long long value = 2LL * GIGABYTES + 512LL * MEGABYTES;
     EXPECT_EQ("2.5G", m_manager.convertToAboutContentLength(value));
 }
 
-TEST_F(CDownloadTaskManagerTest, ConvertAboutStringOverloadHandlesUnknownUnit) {
+TEST_F(下载任务管理器测试, 近似转换字符串重载处理未知单位) {
     EXPECT_EQ("0.00B", m_manager.convertToAboutContentLength(std::string("")));
 }
 
-TEST_F(CDownloadTaskManagerTest, ConvertAboutStringOverloadKilobytes) {
+TEST_F(下载任务管理器测试, 近似转换字符串重载千字节) {
     EXPECT_EQ("4.5K", m_manager.convertToAboutContentLength(std::string("4K512B")));
 }
 
@@ -168,12 +167,12 @@ TEST_F(CDownloadTaskManagerTest, ConvertAboutStringOverloadKilobytes) {
 // isTaskInfoFileExisted
 // ---------------------------------------------------------------------------
 
-TEST_F(CDownloadTaskManagerTest, TaskInfoFileMissingInitially) {
+TEST_F(下载任务管理器测试, 任务信息文件初始不存在) {
     EXPECT_EQ(0, m_manager.isTaskInfoFileExisted());
 }
 
-TEST_F(CDownloadTaskManagerTest, TaskInfoFileDetectedAfterWrite) {
-    layOutSlices(2, 2LL * MEGABYTES, TASK_TODO);
+TEST_F(下载任务管理器测试, 写入后能检测到任务信息文件) {
+    排布分片(2, 2LL * MEGABYTES, TASK_TODO);
     ASSERT_EQ(1, m_manager.writeToFile());
     EXPECT_EQ(1, m_manager.isTaskInfoFileExisted());
 }
@@ -182,37 +181,36 @@ TEST_F(CDownloadTaskManagerTest, TaskInfoFileDetectedAfterWrite) {
 // isTasksFinished / getTotalDownloadedLength
 // ---------------------------------------------------------------------------
 
-TEST_F(CDownloadTaskManagerTest, TasksFinishedTrueWhenNoTasks) {
+TEST_F(下载任务管理器测试, 无任务时任务已完成) {
     EXPECT_EQ(1, m_manager.isTasksFinished());
 }
 
-TEST_F(CDownloadTaskManagerTest, TasksFinishedFalseWithPendingSlice) {
-    layOutSlices(3, 3LL * MEGABYTES, TASK_TODO);
+TEST_F(下载任务管理器测试, 有待完成分片时任务未完成) {
+    排布分片(3, 3LL * MEGABYTES, TASK_TODO);
     EXPECT_EQ(0, m_manager.isTasksFinished());
 }
 
-TEST_F(CDownloadTaskManagerTest, TasksFinishedTrueWhenAllComplete) {
-    layOutSlices(3, 3LL * MEGABYTES, TASK_COMPLETE);
+TEST_F(下载任务管理器测试, 全部分片完成时任务已完成) {
+    排布分片(3, 3LL * MEGABYTES, TASK_COMPLETE);
     EXPECT_EQ(1, m_manager.isTasksFinished());
 }
 
-TEST_F(CDownloadTaskManagerTest, TotalDownloadedLengthZeroWithoutTasks) {
+TEST_F(下载任务管理器测试, 无任务时已下载总长度为零) {
     EXPECT_EQ(0LL, m_manager.getTotalDownloadedLength());
 }
 
-// Documents the off-by-one in the current implementation: each slice
-// contributes (DownloadedPos - StartPos + 1), so N untouched slices already
-// report N bytes downloaded.
-TEST_F(CDownloadTaskManagerTest, TotalDownloadedLengthCountsOneExtraBytePerSlice) {
-    layOutSlices(4, 4LL * MEGABYTES, TASK_TODO);
+// 记录当前实现中的差一错误：每个分片贡献 (DownloadedPos - StartPos + 1)，
+// 因此 N 个尚未开始的分片就已经报告下载了 N 字节。
+TEST_F(下载任务管理器测试, 已下载总长度每个分片多算一字节) {
+    排布分片(4, 4LL * MEGABYTES, TASK_TODO);
     EXPECT_EQ(4LL, m_manager.getTotalDownloadedLength());
 }
 
-TEST_F(CDownloadTaskManagerTest, TotalDownloadedLengthAccumulatesProgress) {
+TEST_F(下载任务管理器测试, 已下载总长度累计进度) {
     m_manager.m_nTasksCount = 2;
     m_manager.m_llContentLength = 2LL * MEGABYTES;
-    addSlice(1, 0, MEGABYTES - 1, 1000, TASK_DOING);
-    addSlice(2, MEGABYTES, 2LL * MEGABYTES, MEGABYTES + 500, TASK_DOING);
+    添加分片(1, 0, MEGABYTES - 1, 1000, TASK_DOING);
+    添加分片(2, MEGABYTES, 2LL * MEGABYTES, MEGABYTES + 500, TASK_DOING);
 
     // (1000 - 0 + 1) + (1048576 + 500 - 1048576 + 1) = 1001 + 501
     EXPECT_EQ(1502LL, m_manager.getTotalDownloadedLength());
@@ -222,7 +220,7 @@ TEST_F(CDownloadTaskManagerTest, TotalDownloadedLengthAccumulatesProgress) {
 // freshDownloadTime
 // ---------------------------------------------------------------------------
 
-TEST_F(CDownloadTaskManagerTest, FreshDownloadTimeAccumulates) {
+TEST_F(下载任务管理器测试, 刷新下载时间会累加) {
     EXPECT_EQ(100LL, m_manager.freshDownloadTime(100));
     EXPECT_EQ(350LL, m_manager.freshDownloadTime(250));
     EXPECT_EQ(350LL, m_manager.m_llDownloadTime);
@@ -232,8 +230,8 @@ TEST_F(CDownloadTaskManagerTest, FreshDownloadTimeAccumulates) {
 // clearDownloadTask
 // ---------------------------------------------------------------------------
 
-TEST_F(CDownloadTaskManagerTest, ClearDownloadTaskResetsStateAndTasks) {
-    layOutSlices(3, 3LL * MEGABYTES, TASK_TODO);
+TEST_F(下载任务管理器测试, 清空下载任务复位状态与任务) {
+    排布分片(3, 3LL * MEGABYTES, TASK_TODO);
     m_manager.freshDownloadTime(500);
     ASSERT_FALSE(m_manager.m_vecPTasks.empty());
 
@@ -247,11 +245,11 @@ TEST_F(CDownloadTaskManagerTest, ClearDownloadTaskResetsStateAndTasks) {
 }
 
 // ---------------------------------------------------------------------------
-// writeToFile / loadTaskFromFile round-trip
+// writeToFile / loadTaskFromFile 往返
 // ---------------------------------------------------------------------------
 
-TEST_F(CDownloadTaskManagerTest, WriteToFileProducesReadableXml) {
-    layOutSlices(2, 2LL * MEGABYTES, TASK_TODO);
+TEST_F(下载任务管理器测试, 写入文件生成可读的XML) {
+    排布分片(2, 2LL * MEGABYTES, TASK_TODO);
     m_manager.freshDownloadTime(1234);
 
     ASSERT_EQ(1, m_manager.writeToFile());
@@ -287,10 +285,10 @@ TEST_F(CDownloadTaskManagerTest, WriteToFileProducesReadableXml) {
     EXPECT_EQ(2, taskNodes);
 }
 
-TEST_F(CDownloadTaskManagerTest, LoadTaskFromFileRestoresEveryField) {
-    layOutSlices(3, 3LL * MEGABYTES, TASK_TODO);
+TEST_F(下载任务管理器测试, 从文件加载恢复每个字段) {
+    排布分片(3, 3LL * MEGABYTES, TASK_TODO);
     m_manager.freshDownloadTime(777);
-    // Give the middle slice some partial progress to verify it survives.
+    // 给中间分片设置一部分进度，验证它能被保留下来。
     static_cast<CDownloadTask*>(m_manager.m_vecPTasks[1])->m_llDownloadedPos =
         MEGABYTES + 4096;
     ASSERT_EQ(1, m_manager.writeToFile());
@@ -320,8 +318,8 @@ TEST_F(CDownloadTaskManagerTest, LoadTaskFromFileRestoresEveryField) {
     reloaded.clearDownloadTask();
 }
 
-TEST_F(CDownloadTaskManagerTest, LoadTaskFromFileRoutesCompletedSlices) {
-    layOutSlices(2, 2LL * MEGABYTES, TASK_COMPLETE);
+TEST_F(下载任务管理器测试, 从文件加载把已完成分片路由到完成队列) {
+    排布分片(2, 2LL * MEGABYTES, TASK_COMPLETE);
     ASSERT_EQ(1, m_manager.writeToFile());
 
     CDownloadTaskManager reloaded("http://example.invalid/file.bin",
@@ -336,56 +334,55 @@ TEST_F(CDownloadTaskManagerTest, LoadTaskFromFileRoutesCompletedSlices) {
 }
 
 // ---------------------------------------------------------------------------
-// checkTaskInfo — slice-layout validation
+// checkTaskInfo —— 分片布局校验
 //
-// checkTaskInfo() first compares m_llContentLength against a live HEAD request.
-// These tests exercise the offline half of the contract: with an unreachable
-// host getContentLength() returns 0, so a manager whose recorded length is
-// non-zero must report `inconsisdent` before any layout check runs.
+// checkTaskInfo() 首先会把 m_llContentLength 与一次实时 HEAD 请求的结果比较。
+// 这些测试覆盖的是该约定中可离线的部分：当主机不可达时 getContentLength()
+// 返回 0，因此一个记录长度非零的管理器必须在任何布局校验之前就报告
+// `inconsisdent`。
 // ---------------------------------------------------------------------------
 
-TEST_F(CDownloadTaskManagerTest, CheckTaskInfoRejectsMismatchedContentLength) {
-    layOutSlices(2, 2LL * MEGABYTES, TASK_TODO);
+TEST_F(下载任务管理器测试, 校验任务信息拒绝不匹配的内容长度) {
+    排布分片(2, 2LL * MEGABYTES, TASK_TODO);
     EXPECT_EQ(inconsisdent, m_manager.checkTaskInfo());
 }
 
-TEST_F(CDownloadTaskManagerTest, CheckTaskInfoDetectsBadStartPosition) {
-    // Content length 0 matches the unreachable-host result, so the layout
-    // checks below are the ones under test.
+TEST_F(下载任务管理器测试, 校验任务信息检测错误的起始位置) {
+    // 内容长度为 0，与主机不可达时的结果一致，因此下面受测的是布局校验。
     m_manager.m_llContentLength = 0;
     m_manager.m_nTasksCount = 1;
-    // TaskId 1 must start at offset 0; 4096 violates the rule.
-    addSlice(1, 4096, 8192, 4096, TASK_TODO);
+    // 编号 1 的任务必须从偏移 0 开始；4096 违反了该规则。
+    添加分片(1, 4096, 8192, 4096, TASK_TODO);
 
     EXPECT_EQ(dividerror, m_manager.checkTaskInfo());
 }
 
-TEST_F(CDownloadTaskManagerTest, CheckTaskInfoDetectsNonContiguousSlices) {
+TEST_F(下载任务管理器测试, 校验任务信息检测不连续的分片) {
     m_manager.m_llContentLength = 0;
     m_manager.m_nTasksCount = 2;
-    addSlice(1, 0, MEGABYTES - 1, 0, TASK_TODO);
-    // Slice 2 starts at the right 1 MB boundary but slice 1 ends short of it.
+    添加分片(1, 0, MEGABYTES - 1, 0, TASK_TODO);
+    // 分片 2 从正确的 1 MB 边界开始，但分片 1 的结束位置没有到达该边界。
     static_cast<CDownloadTask*>(m_manager.m_vecPTasks[0])->m_llEndPos =
         MEGABYTES - 100;
-    addSlice(2, MEGABYTES, 2LL * MEGABYTES - 1, MEGABYTES, TASK_TODO);
+    添加分片(2, MEGABYTES, 2LL * MEGABYTES - 1, MEGABYTES, TASK_TODO);
 
     EXPECT_EQ(dividerror, m_manager.checkTaskInfo());
 }
 
-TEST_F(CDownloadTaskManagerTest, CheckTaskInfoDetectsWrongFinalEndPosition) {
+TEST_F(下载任务管理器测试, 校验任务信息检测错误的末尾结束位置) {
     m_manager.m_llContentLength = 0;
     m_manager.m_nTasksCount = 1;
-    // Last slice must satisfy EndPos + 1 == ContentLength + 1, i.e. EndPos == 0.
-    addSlice(1, 0, MEGABYTES - 1, 0, TASK_TODO);
+    // 最后一个分片必须满足 EndPos + 1 == ContentLength + 1，即 EndPos == 0。
+    添加分片(1, 0, MEGABYTES - 1, 0, TASK_TODO);
 
     EXPECT_EQ(dividerror, m_manager.checkTaskInfo());
 }
 
 // ---------------------------------------------------------------------------
-// errorcode enum
+// errorcode 枚举
 // ---------------------------------------------------------------------------
 
-TEST(ErrorCodeTest, ValuesMatchDocumentedContract) {
+TEST(错误码测试, 取值符合文档约定) {
     EXPECT_EQ(1, noerror);
     EXPECT_EQ(2, inconsisdent);
     EXPECT_EQ(3, dividerror);
@@ -395,7 +392,7 @@ TEST(ErrorCodeTest, ValuesMatchDocumentedContract) {
     EXPECT_EQ(7, localfilerror);
 }
 
-TEST(SizeMacroTest, UnitsAreBinaryMultiples) {
+TEST(大小宏测试, 单位为二进制倍数) {
     EXPECT_EQ(1024, KILOBYTES);
     EXPECT_EQ(1048576, MEGABYTES);
     EXPECT_EQ(1073741824, GIGABYTES);

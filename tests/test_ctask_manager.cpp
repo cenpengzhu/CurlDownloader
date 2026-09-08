@@ -9,35 +9,36 @@
 
 namespace {
 
-// CTaskManager::clearTask() deletes every task it holds in m_vecPTasks, so the
-// fixture must only free the tasks it allocated that never reached the manager.
-class CTaskManagerTest : public ::testing::Test {
+// CTaskManager::clearTask() 会 delete 掉 m_vecPTasks 中持有的每一个任务，
+// 因此夹具只能释放那些由它分配、但从未交给管理器的任务。
+class 任务管理器测试 : public ::testing::Test {
 protected:
     void SetUp() override {
         for (int i = 1; i <= 3; ++i) {
             auto* t = new CTask;
             t->m_nTaskId = i;
             t->m_nTaskStatus = TASK_TODO;
-            m_tasks.push_back(t);
+            m_任务.push_back(t);
         }
     }
 
     void TearDown() override {
-        std::vector<CTask*> owned = m_manager.m_vecPTasks;
+        std::vector<CTask*> 已交给管理器 = m_manager.m_vecPTasks;
         m_manager.clearTask();
-        for (auto* t : m_tasks) {
-            if (std::find(owned.begin(), owned.end(), t) == owned.end()) {
+        for (auto* t : m_任务) {
+            if (std::find(已交给管理器.begin(), 已交给管理器.end(), t)
+                == 已交给管理器.end()) {
                 delete t;
             }
         }
-        m_tasks.clear();
+        m_任务.clear();
     }
 
     CTaskManager m_manager;
-    std::vector<CTask*> m_tasks;
+    std::vector<CTask*> m_任务;
 };
 
-TEST_F(CTaskManagerTest, InitiallyEmpty) {
+TEST_F(任务管理器测试, 初始为空) {
     EXPECT_EQ(0, m_manager.m_nTasksCount);
     EXPECT_EQ(0, m_manager.m_nCompleteTasksCount);
     EXPECT_EQ(0, m_manager.m_nTodoTasksCount);
@@ -46,37 +47,37 @@ TEST_F(CTaskManagerTest, InitiallyEmpty) {
     EXPECT_TRUE(m_manager.m_vecPCompleteTasks.empty());
 }
 
-TEST_F(CTaskManagerTest, PushOneTodoTask) {
-    auto* task = m_tasks[0];
+TEST_F(任务管理器测试, 压入一个待办任务) {
+    auto* task = m_任务[0];
     EXPECT_EQ(1, m_manager.pushOneTodoTask(task));
     EXPECT_EQ(1u, m_manager.m_vecPTodoTasks.size());
     EXPECT_EQ(task, m_manager.m_vecPTodoTasks.back());
 }
 
-TEST_F(CTaskManagerTest, PushOneCompleteTask) {
-    auto* task = m_tasks[0];
+TEST_F(任务管理器测试, 压入一个完成任务) {
+    auto* task = m_任务[0];
     task->m_nTaskStatus = TASK_COMPLETE;
     EXPECT_EQ(1, m_manager.pushOneCompleteTask(task));
     EXPECT_EQ(1u, m_manager.m_vecPCompleteTasks.size());
 }
 
-TEST_F(CTaskManagerTest, PushOneTaskRoutesTodo) {
-    auto* task = m_tasks[0];
+TEST_F(任务管理器测试, 压入任务按待办路由) {
+    auto* task = m_任务[0];
     ASSERT_EQ(1, m_manager.pushOneTask(task));
     EXPECT_EQ(1u, m_manager.m_vecPTodoTasks.size());
     EXPECT_EQ(0u, m_manager.m_vecPCompleteTasks.size());
 }
 
-TEST_F(CTaskManagerTest, PushOneTaskRoutesComplete) {
-    auto* task = m_tasks[0];
+TEST_F(任务管理器测试, 压入任务按完成路由) {
+    auto* task = m_任务[0];
     task->m_nTaskStatus = TASK_COMPLETE;
     ASSERT_EQ(1, m_manager.pushOneTask(task));
     EXPECT_EQ(0u, m_manager.m_vecPTodoTasks.size());
     EXPECT_EQ(1u, m_manager.m_vecPCompleteTasks.size());
 }
 
-TEST_F(CTaskManagerTest, PopOneTaskTodoReturnsTodoAndMarksDoing) {
-    auto* task = m_tasks[0];
+TEST_F(任务管理器测试, 弹出待办任务返回该任务并标记为进行中) {
+    auto* task = m_任务[0];
     m_manager.pushOneTask(task);
 
     CTask* popped = m_manager.popOneTaskTodo();
@@ -87,23 +88,23 @@ TEST_F(CTaskManagerTest, PopOneTaskTodoReturnsTodoAndMarksDoing) {
     EXPECT_EQ(1u, m_manager.m_vecPCompleteTasks.size());
 }
 
-TEST_F(CTaskManagerTest, PopOneTaskTodoReturnsNullOnEmpty) {
+TEST_F(任务管理器测试, 无待办任务时弹出返回空) {
     EXPECT_EQ(nullptr, m_manager.popOneTaskTodo());
 }
 
-TEST_F(CTaskManagerTest, HaveTasksTodo) {
+TEST_F(任务管理器测试, 查询是否有待办任务) {
     EXPECT_EQ(0, m_manager.haveTasksTodo());
-    m_manager.pushOneTodoTask(m_tasks[0]);
+    m_manager.pushOneTodoTask(m_任务[0]);
     EXPECT_EQ(1, m_manager.haveTasksTodo());
 }
 
-// collectTasks() scans m_vecPCompleteTasks — which holds both finished and
-// in-flight tasks — and returns anything that is neither COMPLETE nor DOING
-// (i.e. a failed TASK_DONE) to the todo queue.
-TEST_F(CTaskManagerTest, CollectTasksReturnsFailedTasksToTodo) {
-    auto* completed = m_tasks[0]; completed->m_nTaskStatus = TASK_COMPLETE;
-    auto* failed = m_tasks[1];    failed->m_nTaskStatus = TASK_DONE;
-    auto* inFlight = m_tasks[2];  inFlight->m_nTaskStatus = TASK_DOING;
+// collectTasks() 会扫描 m_vecPCompleteTasks —— 其中同时存放着已完成和进行中的
+// 任务 —— 并把既不是 COMPLETE 也不是 DOING 的任务（即失败的 TASK_DONE）退回
+// 待办队列。
+TEST_F(任务管理器测试, 回收任务把失败任务退回待办) {
+    auto* completed = m_任务[0]; completed->m_nTaskStatus = TASK_COMPLETE;
+    auto* failed = m_任务[1];    failed->m_nTaskStatus = TASK_DONE;
+    auto* inFlight = m_任务[2];  inFlight->m_nTaskStatus = TASK_DOING;
 
     m_manager.m_vecPTasks.push_back(completed);
     m_manager.m_vecPTasks.push_back(failed);
@@ -122,9 +123,9 @@ TEST_F(CTaskManagerTest, CollectTasksReturnsFailedTasksToTodo) {
     EXPECT_EQ(inFlight, m_manager.m_vecPCompleteTasks[1]);
 }
 
-TEST_F(CTaskManagerTest, CollectTasksLeavesCompleteAndDoingInPlace) {
-    auto* completed = m_tasks[0]; completed->m_nTaskStatus = TASK_COMPLETE;
-    auto* inFlight = m_tasks[1];  inFlight->m_nTaskStatus = TASK_DOING;
+TEST_F(任务管理器测试, 回收任务保留已完成和进行中的任务) {
+    auto* completed = m_任务[0]; completed->m_nTaskStatus = TASK_COMPLETE;
+    auto* inFlight = m_任务[1];  inFlight->m_nTaskStatus = TASK_DOING;
 
     m_manager.m_vecPTasks.push_back(completed);
     m_manager.m_vecPTasks.push_back(inFlight);
@@ -137,15 +138,15 @@ TEST_F(CTaskManagerTest, CollectTasksLeavesCompleteAndDoingInPlace) {
     EXPECT_EQ(2u, m_manager.m_vecPCompleteTasks.size());
 }
 
-TEST_F(CTaskManagerTest, ClearTaskDeletesAllAndResets) {
-    m_manager.pushOneTask(m_tasks[0]);
-    m_manager.pushOneTask(m_tasks[1]);
+TEST_F(任务管理器测试, 清空任务会删除全部并复位) {
+    m_manager.pushOneTask(m_任务[0]);
+    m_manager.pushOneTask(m_任务[1]);
 
     m_manager.clearTask();
 
-    // The two pushed tasks were deleted by clearTask(); drop the dangling
-    // pointers so TearDown() does not touch them again.
-    m_tasks.erase(m_tasks.begin(), m_tasks.begin() + 2);
+    // 压入的两个任务已被 clearTask() 删除；这里丢掉悬垂指针，避免
+    // TearDown() 再次触碰它们。
+    m_任务.erase(m_任务.begin(), m_任务.begin() + 2);
 
     EXPECT_EQ(0, m_manager.m_nTasksCount);
     EXPECT_TRUE(m_manager.m_vecPTasks.empty());
@@ -153,26 +154,26 @@ TEST_F(CTaskManagerTest, ClearTaskDeletesAllAndResets) {
     EXPECT_TRUE(m_manager.m_vecPCompleteTasks.empty());
 }
 
-TEST_F(CTaskManagerTest, HaveTasksNotCompleteWithTodo) {
-    m_manager.pushOneTodoTask(m_tasks[0]);
+TEST_F(任务管理器测试, 有待办任务时存在未完成任务) {
+    m_manager.pushOneTodoTask(m_任务[0]);
     EXPECT_EQ(1, m_manager.haveTasksNotComplete());
 }
 
-TEST_F(CTaskManagerTest, HaveTasksNotCompleteWithFailed) {
-    auto* t = m_tasks[0];
+TEST_F(任务管理器测试, 有失败任务时存在未完成任务) {
+    auto* t = m_任务[0];
     t->m_nTaskStatus = TASK_DONE;
     m_manager.pushOneCompleteTask(t);
     EXPECT_EQ(1, m_manager.haveTasksNotComplete());
 }
 
-TEST_F(CTaskManagerTest, HaveTasksNotCompleteFalseWhenAllComplete) {
-    auto* t = m_tasks[0];
+TEST_F(任务管理器测试, 全部完成时不存在未完成任务) {
+    auto* t = m_任务[0];
     t->m_nTaskStatus = TASK_COMPLETE;
     m_manager.pushOneCompleteTask(t);
     EXPECT_EQ(0, m_manager.haveTasksNotComplete());
 }
 
-TEST_F(CTaskManagerTest, PushNullDoesNothing) {
+TEST_F(任务管理器测试, 压入空指针不做任何事) {
     EXPECT_EQ(0, m_manager.pushOneTask(nullptr));
     EXPECT_EQ(0, m_manager.pushOneTodoTask(nullptr));
     EXPECT_EQ(0, m_manager.pushOneCompleteTask(nullptr));
